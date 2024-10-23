@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="694.0" prefWidth="1080.0" xmlns:fa="http://www.jensd.de/2014/fxml" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.inventory_system.LoginController">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="1080.0">
+         <children>
+            <AnchorPane fx:id="login_form" prefHeight="200.0" prefWidth="1080.0">
+               <children>
+                  <AnchorPane layoutX="274.0" prefHeight="694.0" prefWidth="805.0">
+                     <children>
+                        <TextField fx:id="username" layoutX="245.0" layoutY="356.0" onKeyTyped="#textfieldDesign" onMouseClicked="#textfieldDesign" onMouseDragged="#textfieldDesign" prefHeight="42.0" prefWidth="366.0" promptText="Username" styleClass="textfield-design" stylesheets="@login.css">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+
+                        </TextField>
+                        <PasswordField fx:id="password" layoutX="245.0" layoutY="415.0" onKeyTyped="#textfieldDesign" onMouseClicked="#textfieldDesign" onMouseDragged="#textfieldDesign" prefHeight="42.0" prefWidth="366.0" promptText="Password" styleClass="textfield-design" stylesheets="@login.css">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </PasswordField>
+                        <Label alignment="CENTER" layoutX="310.0" layoutY="262.0" prefHeight="44.0" prefWidth="240.0" text="INGRESAR" textFill="#123fa7">
+                           <font>
+                              <Font name="Berlin Sans FB" size="48.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="login_btn" layoutX="325.0" layoutY="484.0" mnemonicParsing="false" onAction="#login" prefHeight="50.0" prefWidth="206.0" styleClass="login-button" stylesheets="@login.css" text="LOGIN" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                        <FontAwesomeIconView glyphName="USERS" layoutX="372.0" layoutY="234.0" selectionFill="#2f466b" size="98" text="" wrappingWidth="112.22855949401855" />
+                        <Button alignment="CENTER" contentDisplay="RIGHT" layoutX="741.0" layoutY="14.0" mnemonicParsing="false" onAction="#onExit" onMouseClicked="#onExit" onMouseDragged="#onExit" prefHeight="29.0" prefWidth="50.0" styleClass="close" stylesheets="@login.css">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="16.0" />
+                           </graphic>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="694.0" prefWidth="275.0" styleClass="login-bg" stylesheets="@login.css">
+                     <children>
+                        <ImageView fx:id="loginImage" fitHeight="158.0" fitWidth="206.0" layoutX="35.0" layoutY="24.0">
+                              <Image url="@images/bellas.png" />
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

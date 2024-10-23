@@ -1,0 +1,2 @@
+Manifest-Version: 1.0
+Main-Class: org.inventory_system.app.Main
