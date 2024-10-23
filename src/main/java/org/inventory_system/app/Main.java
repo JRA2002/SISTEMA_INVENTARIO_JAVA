@@ -1,4 +1,4 @@
-package org.inventory_system;
+package org.inventory_system.app;
 
 public class Main {
     public static void main(String[] args) {
