@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="694.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.inventory_system.DashboardController">
+   <children>
+      <AnchorPane prefHeight="694.0" prefWidth="1080.0">
+         <children>
+            <AnchorPane layoutY="-6.0" prefHeight="700.0" prefWidth="275.0" styleClass="navbar" stylesheets="@dashboard.css">
+               <children>
+                  <Button fx:id="product_btn" layoutX="39.0" layoutY="266.0" mnemonicParsing="false" onAction="#activateDashboard" onMouseClicked="#activateAnchorPane" prefWidth="200.0" styleClass="navbutton" stylesheets="@dashboard.css" text="PRODUCTOS" textFill="WHITE">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="ARCHIVE" size="1.2em" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="dashboard_btn" alignment="CENTER" layoutX="39.0" layoutY="222.0" mnemonicParsing="false" onAction="#activateDashboard" onMouseClicked="#activateAnchorPane" prefWidth="200.0" styleClass="navbutton" stylesheets="@dashboard.css" text="DASHBOARD" textFill="WHITE">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="1.2em" text="" />
+                     </graphic>
+                  </Button>
+                  <Label alignment="CENTER" layoutX="49.0" layoutY="65.0" prefHeight="30.0" prefWidth="180.0" text="BIENVENIDO !" textFill="WHITE">
+                     <font>
+                        <Font name="Arial Black" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="user" alignment="CENTER" layoutX="72.0" layoutY="96.0" prefHeight="30.0" prefWidth="134.0" textFill="WHITE">
+                     <font>
+                        <Font name="Arial Black" size="20.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="invoice_btn" layoutX="39.0" layoutY="444.0" mnemonicParsing="false" onAction="#activateDashboard" onMouseClicked="#activateAnchorPane" prefWidth="200.0" styleClass="navbutton" stylesheets="@dashboard.css" text="FACTURAS" textFill="WHITE">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="CLIPBOARD" size="1.2em" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="customer_btn" layoutX="39.0" layoutY="525.0" mnemonicParsing="false" onAction="#activateDashboard" onMouseClicked="#activateAnchorPane" prefWidth="200.0" styleClass="navbutton" stylesheets="@dashboard.css" text="USUARIOS" textFill="WHITE">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="USER" size="1.2em" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="billing_btn" layoutX="38.0" layoutY="357.0" mnemonicParsing="false" onAction="#activateDashboard" onMouseClicked="#activateAnchorPane" prefWidth="200.0" styleClass="navbutton" stylesheets="@dashboard.css" text="VENTAS" textFill="WHITE">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="SHOPPING_BAG" size="1.2em" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="purchase_btn" layoutX="39.0" layoutY="401.0" mnemonicParsing="false" onAction="#activateDashboard" onMouseClicked="#activateAnchorPane" prefWidth="200.0" styleClass="navbutton" stylesheets="@dashboard.css" text="COMPRAS" textFill="WHITE">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="SHOPPING_CART" size="1.2em" />
+                     </graphic>
+                  </Button>
+
+                  <Button fx:id="signout_btn" layoutX="14.0" layoutY="641.0" mnemonicParsing="false" onAction="#signOut" prefHeight="38.0" prefWidth="115.0" styleClass="navbutton" stylesheets="@dashboard.css" text="SALIR" textFill="WHITE">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" size="1.2em" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="new_inventory_btn" layoutX="39.0" layoutY="312.0" mnemonicParsing="false" onAction="#activateDashboard" onMouseClicked="#activateAnchorPane" prefHeight="35.0" prefWidth="200.0" styleClass="navbutton" stylesheets="@dashboard.css" text="NUEVO INVENTARIO" textFill="WHITE" >
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="1.2em" />
+                     </graphic>
+                  </Button>
+               </children></AnchorPane>
+            <AnchorPane layoutX="275.0" prefHeight="694.0" prefWidth="808.0">
+               <children>
+                  <Button alignment="CENTER" contentDisplay="RIGHT" layoutX="743.0" layoutY="9.0" mnemonicParsing="false" onMouseClicked="#onExit" onMouseDragged="#onExit" prefHeight="29.0" prefWidth="50.0" styleClass="close" stylesheets="@dashboard.css">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="16.0" text="" />
+                     </graphic>
+                  </Button>
+                  <AnchorPane layoutX="-2.0" prefHeight="47.0" prefWidth="741.0">
+                     <children>
+                        <Label layoutX="26.0" layoutY="4.0" prefHeight="42.0" prefWidth="530.0" text="SISTEMA DE INVENTARIO" textFill="#0e0836">
+                           <font>
+                              <Font name="Droid Sans Bold" size="30.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="dasboard_pane" layoutX="-1.0" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" visible="false">
+                     <children>
+                        <Pane layoutX="44.0" layoutY="47.0" prefHeight="200.0" prefWidth="227.0" styleClass="dasboard_box" stylesheets="@dashboard.css">
+                           <children>
+                              <Label layoutX="43.0" layoutY="31.0" text="STOCK TOTAL" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Rounded MT Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="dash_total_stocks" alignment="CENTER" layoutX="20.0" layoutY="78.0" prefHeight="36.0" prefWidth="191.0" text="32" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Rounded MT Bold" size="30.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <Pane layoutX="310.0" layoutY="47.0" prefHeight="200.0" prefWidth="227.0" styleClass="dasboard_box" stylesheets="@dashboard.css">
+                           <children>
+                              <Label layoutX="26.0" layoutY="32.0" text="TOTAL VENTAS" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Rounded MT Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="dash_total_sold" alignment="CENTER" layoutX="22.0" layoutY="82.0" prefHeight="36.0" prefWidth="191.0" text="18" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Rounded MT Bold" size="30.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <Pane layoutX="569.0" layoutY="47.0" prefHeight="200.0" prefWidth="227.0" styleClass="dasboard_box" stylesheets="@dashboard.css">
+                           <children>
+                              <Label layoutX="11.0" layoutY="31.0" text="TOTAL COMPRAS" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Rounded MT Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="dash_total_purchase" alignment="CENTER" layoutX="17.0" layoutY="82.0" prefHeight="36.0" prefWidth="200.0" text="50" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Rounded MT Bold" size="30.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <Pane layoutX="134.0" layoutY="347.0" prefHeight="200.0" prefWidth="294.0" styleClass="dasboard_box" stylesheets="@dashboard.css">
+                           <children>
+                              <Label alignment="CENTER" layoutX="35.0" layoutY="21.0" prefHeight="22.0" prefWidth="220.0" text="VENTAS MENSUAL" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Rounded MT Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="dash_total_sales_this_month" layoutX="97.0" layoutY="71.0" prefHeight="36.0" prefWidth="191.0" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Rounded MT Bold" size="30.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="dash_total_sales_this_month_name" alignment="CENTER" layoutX="71.0" layoutY="127.0" prefHeight="28.0" prefWidth="156.0" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Rounded MT Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="71.0" layoutY="67.0" prefHeight="45.0" prefWidth="56.0" text="S/ " textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <Pane layoutX="467.0" layoutY="347.0" prefHeight="200.0" prefWidth="287.0" styleClass="dasboard_box" stylesheets="@dashboard.css">
+                           <children>
+                              <Label alignment="CENTER" layoutX="16.0" layoutY="23.0" prefHeight="22.0" prefWidth="247.0" text="VENDIDOS ESTE MES" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Rounded MT Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="dash_total_items_sold_this_month" alignment="CENTER" layoutX="13.0" layoutY="64.0" prefHeight="36.0" prefWidth="247.0" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Rounded MT Bold" size="30.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="dash_total_sales_items_this_month_name" alignment="CENTER" layoutX="68.0" layoutY="122.0" prefHeight="28.0" prefWidth="149.0" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Rounded MT Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                     </children></AnchorPane>
+                  <AnchorPane fx:id="billing_pane" layoutX="-1.0" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" stylesheets="@dashboard.css">
+                     <children>
+                        <TableView fx:id="billing_table" layoutX="13.0" layoutY="59.0" prefHeight="289.0" prefWidth="794.0" stylesheets="@dashboard.css">
+                          <columns>
+                              <TableColumn fx:id="col_bill_item_num" text="Codigo" />
+                              <TableColumn fx:id="col_bill_item_name" prefWidth="234.4000244140625" text="Producto" />
+                              <TableColumn fx:id="col_bill_quantity" prefWidth="159.5999755859375" text="Cantidad" />
+                              <TableColumn fx:id="col_bill_price" prefWidth="120.4000244140625" text="Precio" />
+                              <TableColumn fx:id="col_bill_total_amt" minWidth="0.0" prefWidth="197.60001220703123" text="Monto Total" />
+                          </columns>
+                        </TableView>
+
+                        <Separator layoutX="13.0" layoutY="355.0" prefHeight="0.0" prefWidth="794.0" />
+                        <TextField fx:id="bill_item" layoutX="151.0" layoutY="420.0" prefHeight="30.0" prefWidth="180.0" promptText="Ingrese Product Id" styleClass="textfield" stylesheets="@dashboard.css" />
+                        <Label layoutX="28.0" layoutY="419.0" prefHeight="30.0" prefWidth="83.0" text="Product Id:">
+                           <font>
+                              <Font name="Dubai Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="449.0" layoutY="420.0" prefHeight="32.0" prefWidth="83.0" text="Cantidad:">
+                           <font>
+                              <Font name="Dubai Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="bill_save" alignment="CENTER" layoutX="316.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#billSave" prefHeight="50.0" prefWidth="150.0" styleClass="save" stylesheets="@dashboard.css" text="GUARDAR">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="SAVE" size="24.0" text="" />
+                           </graphic>
+                           <font>
+                              <Font name="Dubai Bold" size="16.0" />
+                           </font></Button>
+                        <Button fx:id="bill_clear" layoutX="480.0" layoutY="570.0" mnemonicParsing="false" onAction="#billCancelSale" onMouseClicked="#billCancelSale" prefHeight="50.0" prefWidth="150.0" styleClass="clear" stylesheets="@dashboard.css" text="CANCELAR">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="REMOVE" size="24.0" text="" />
+                           </graphic>
+                           <font>
+                              <Font name="Dubai Bold" size="16.0" />
+                           </font></Button>
+
+                        <Button fx:id="bill_add" alignment="CENTER" layoutX="644.0" layoutY="570.0" mnemonicParsing="false" onAction="#addProductBilling" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="AGREGAR">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="PLUS_CIRCLE" size="24.0" text="" />
+                           </graphic>
+                           <font>
+                              <Font name="Dubai Bold" size="16.0" />
+                           </font>
+                        </Button>
+                        <Label layoutX="28.0" layoutY="379.0" prefHeight="29.0" prefWidth="115.0" text="Numero de Factura :">
+                           <font>
+                              <Font name="Dubai Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="inv_num" layoutX="151.0" layoutY="352.0" prefHeight="32.0" prefWidth="102.0" />
+                        <Label layoutX="449.0" layoutY="502.0" prefHeight="32.0" prefWidth="102.0" text="Monto Final :">
+                           <font>
+                              <Font name="Dubai Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="537.0" layoutY="502.0" prefHeight="32.0" prefWidth="45.0" text="S/ ">
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="final_amount" layoutX="559.0" layoutY="502.0" prefHeight="32.0" prefWidth="156.0" text="0.00">
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="sales_quantity" layoutX="554.0" layoutY="420.0" prefHeight="32.0" prefWidth="180.0" promptText="Ingrese Cantidad" styleClass="textfield" stylesheets="@dashboard.css" />
+
+                        <Button fx:id="bill_delete" alignment="CENTER" layoutX="743.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#deleteBillingData" prefHeight="38.0" prefWidth="50.0" styleClass="add" stylesheets="@dashboard.css">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="MINUS_CIRCLE" size="24.0" />
+                           </graphic>
+                        </Button>
+
+                        <Button fx:id="bill_clear1" layoutX="12.0" layoutY="13.0" mnemonicParsing="false" onAction="#searchForBills" onMouseClicked="#billClearData" prefHeight="36.0" prefWidth="115.0" styleClass="clear" stylesheets="@dashboard.css" text="VENTAS">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="FILE_PDF_ALT" size="18.0" />
+                           </graphic>
+                           <font>
+                              <Font name="Dubai Bold" size="15.0" />
+                           </font>
+                        </Button>
+                     </children></AnchorPane>
+                  <AnchorPane fx:id="customer_pane" layoutX="-1.0" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" visible="false">
+                     <children>
+                        <TableView fx:id="customer_table" layoutX="13.0" layoutY="110.0" prefHeight="330.0" prefWidth="794.0" stylesheets="@dashboard.css">
+                           <columns>
+                              <TableColumn fx:id="cust_col_username" prefWidth="198.5" text="Usuario" />
+                              <TableColumn fx:id="cust_col_phone" prefWidth="198.5" text="Telefono" />
+                              <TableColumn fx:id="cust_col_email" prefWidth="198.5" text="Email" />
+                              <TableColumn fx:id="cust_col_rol" prefWidth="198.5" text="Rol" />
+                           </columns>
+                        </TableView>
+                        <Button fx:id="cust_btn_delete" layoutX="316.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#deleteCustomerData" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="ELIMINAR">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="24.0" />
+                           </graphic>
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="cust_btn_edit" layoutX="480.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#updateUserData" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="EDITAR">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="EDIT" size="24.0" />
+                           </graphic>
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="cust_btn_add" layoutX="644.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#setNewUser" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="NUEVO">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="PLUS_CIRCLE" size="24.0" />
+                           </graphic>
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Button>
+
+                        <Button fx:id="cust_btn_print" layoutX="680.0" layoutY="32.0" mnemonicParsing="false" onAction="#printCustomersDetails" prefHeight="40.0" prefWidth="100.0" styleClass="add" stylesheets="@dashboard.css">
+                           <graphic>
+                              <FontAwesomeIconView fx:id="customer_print" fill="WHITE" glyphName="PRINT" size="24.0" />
+                           </graphic>
+                        </Button>
+                     </children></AnchorPane>
+                  <AnchorPane fx:id="product_pane" layoutX="-1.0" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" visible="false">
+                     <children>
+                        <TableView fx:id="product_table" layoutX="13.0" layoutY="159.0" prefHeight="474.0" prefWidth="794.0" stylesheets="@dashboard.css">
+                           <columns>
+                              <TableColumn fx:id="prod_col_id" prefWidth="100" text="Id" />
+                              <TableColumn fx:id="prod_col_name" prefWidth="120" text="Nombre" />
+                              <TableColumn fx:id="prod_col_qty" prefWidth="120" text="Cantidad" />
+                              <TableColumn fx:id="prod_col_uni" prefWidth="120" text="Unidad" />
+                              <TableColumn fx:id="prod_col_pre" prefWidth="120" text="Precio" />
+                              <TableColumn fx:id="prod_col_date" prefWidth="120" text="Vencimiento" />
+                              <TableColumn fx:id="prod_col_cat_name" prefWidth="120" text="Categoria" />
+                           </columns>
+                        </TableView>
+                        <TextField fx:id="prod_field_search" layoutX="13.0" layoutY="94.0" prefHeight="40.0" prefWidth="206.0" promptText="Buscar Producto..." styleClass="textfield" stylesheets="@dashboard.css" >
+                        </TextField>
+
+                         <Button fx:id="prod_btn_print" layoutX="361.0" layoutY="94.0" mnemonicParsing="false" onAction="#printProductsDetails" prefHeight="40.0" prefWidth="50.0" styleClass="add" stylesheets="@dashboard.css">
+                             <graphic>
+                                 <FontAwesomeIconView fx:id="product_print" fill="WHITE" glyphName="PRINT" size="18.0" />
+                             </graphic>
+                         </Button>
+
+                        <Button fx:id="prod_btn_search" layoutX="420.0" layoutY="94.0" mnemonicParsing="false" onAction="#searchProductsLocation" prefHeight="40.0" prefWidth="100.0" styleClass="add" stylesheets="@dashboard.css" text="UBICACION">
+                           <graphic>
+                              <FontAwesomeIconView fx:id="product_search" fill="WHITE" glyphName="SEARCH" size="18.0" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="prod_btn_edit" layoutX="564.0" layoutY="94.0" mnemonicParsing="false" onAction="#editProduct" prefHeight="40.0" prefWidth="50.0" styleClass="add" stylesheets="@dashboard.css">
+                           <graphic>
+                              <FontAwesomeIconView fx:id="product_edit" fill="WHITE" glyphName="EDIT" size="18.0" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="prod_btn_delete" layoutX="624.0" layoutY="94.0" mnemonicParsing="false" onAction="#deleteProduct" prefHeight="40.0" prefWidth="50.0" styleClass="add" stylesheets="@dashboard.css">
+                           <graphic>
+                              <FontAwesomeIconView fx:id="product_delete" fill="WHITE" glyphName="MINUS_CIRCLE" size="18.0" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="prod_btn_update" layoutX="684.0" layoutY="94.0" mnemonicParsing="false" onAction="#updateProductList" prefHeight="40.0" prefWidth="50.0" styleClass="add" stylesheets="@dashboard.css">
+                           <graphic>
+                              <FontAwesomeIconView fx:id="product_update" fill="WHITE" glyphName="REFRESH" size="18.0" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="prod_btn_add" layoutX="744.0" layoutY="94.0" mnemonicParsing="false" onAction="#addProduct" prefHeight="40.0" prefWidth="50.0" styleClass="add" stylesheets="@dashboard.css">
+                           <graphic>
+                              <FontAwesomeIconView fx:id="product_add" fill="WHITE" glyphName="PLUS_CIRCLE" size="18.0" />
+                           </graphic>
+                        </Button>
+                     </children></AnchorPane>
+                  <AnchorPane fx:id="new_inventory_pane" layoutX="-1.0" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" visible="false">
+
+                  </AnchorPane>
+                  <AnchorPane fx:id="invoice_pane" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" visible="false">
+                     <children>
+                        <TableView fx:id="invoice_table" layoutX="13.0" layoutY="74.0" prefHeight="558.0" prefWidth="794.0" stylesheets="@dashboard.css">
+                           <columns>
+                              <TableColumn fx:id="invoice_col_id" prefWidth="198.5" text="FACTURA" />
+                              <TableColumn fx:id="invoice_col_date" prefWidth="198.5" text="FECHA DE COMPRA" />
+                              <TableColumn fx:id="invoice_col_username" prefWidth="198.5" text="VENDEDOR" />
+                              <TableColumn fx:id="invoice_col_total" prefWidth="198.5" text="MONTO TOTAL" />
+                           </columns>
+                        </TableView>
+                        <Button fx:id="invoice_btn_print" layoutX="694.0" layoutY="16.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="add" stylesheets="@dashboard.css">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="PRINT" size="24.0" />
+                           </graphic>
+                        </Button>
+                        <Label layoutX="14.0" layoutY="16.0" prefHeight="47.0" prefWidth="206.0" text="COMPRAS TOTALES :">
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="invoice_total_amount" layoutX="180.0" layoutY="16.0" prefHeight="47.0" prefWidth="267.0">
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="purchase_pane" layoutX="-1.0" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" visible="false">
+                     <children>
+                        <TableView fx:id="purchase_table" layoutX="13.0" layoutY="68.0" prefHeight="400.0" prefWidth="794.0" stylesheets="@dashboard.css">
+                           <columns>
+                              <TableColumn fx:id="purchase_col_prod" prefWidth="198.5" text="PRODUCTO" />
+                              <TableColumn fx:id="purchase_col_supplier" prefWidth="218.5" text="PROVEEDOR" />
+                              <TableColumn fx:id="purchase_col_price" prefWidth="138.5" text="PRECIO" />
+                              <TableColumn fx:id="purchase_col_unit" prefWidth="80.0" text="UNIDAD" />
+                              <TableColumn fx:id="purchase_col_qty" minWidth="0.0" prefWidth="158.5" text="CANTIDAD" />
+
+                           </columns>
+                        </TableView>
+                        <Button fx:id="purchase_btn_cancel" layoutX="316.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#cancelPurchase" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="CANCEL">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="24.0" />
+                           </graphic>
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="purchase_btn_new" layoutX="480.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#newPurchase" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="NUEVA">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="PLUS_CIRCLE" size="24.0" />
+                           </graphic>
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="purchase_btn_save" layoutX="644.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#savePurchase" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="COMPRAR">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="SAVE" size="24.0" />
+                           </graphic>
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Button>
+                        <Label layoutX="13.0" layoutY="14.0" prefHeight="47.0" prefWidth="150.0" text="MONTO TOTAL :">
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="purchase_total_amount" layoutX="160.0" layoutY="14.0" prefHeight="47.0" prefWidth="150.0" text="S/. ">
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="search_prod_purchase" layoutX="594.0" layoutY="14.0" prefHeight="40.0" prefWidth="206.0" promptText="Buscar Producto..." styleClass="textfield" stylesheets="@dashboard.css" />
+                     </children></AnchorPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
