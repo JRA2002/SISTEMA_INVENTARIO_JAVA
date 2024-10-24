@@ -1,0 +1,49 @@
+.close,.print{
+-fx-background-color:linear-gradient(to bottom right , #092f79, #00d4ff);
+-fx-background-radius:5px;
+-fx-cursor:hand;
+-fx-text-fill:#fff;
+}
+
+.textfield{
+-fx-background-color:linear-gradient(to bottom,#efefef,#eee);
+-fx-border-color:linear-gradient(to bottom right, #092f79, #00d4ff);
+-fx-border-width:.8px;
+-fx-font-family:"Tahoma";
+-fx-border-radius:4px;
+}
+
+.textfield:focused{
+-fx-border-width:1.8px;
+-fx-background-color:#fff;
+}
+
+.billsanchorpane{
+-fx-border-width:2px;
+-fx-border-color:#000;
+}
+.table-view{
+-fx-background-color:transparent;
+-fx-border-color:linear-gradient(to bottom right , #092f79, #00d4ff);
+-fx-border-radius:8px;
+-fx-padding:0px
+}
+
+.table-view .table-column{
+-fx-alignment:CENTER;
+}
+.table-view .column-header-background{
+-fx-background-color:linear-gradient(to bottom right , #092f79, #00d4ff);
+-fx-background-insets:0 0 0 0;
+-fx-background-radius: 8px 8px 0px 0px;
+}
+
+.table-view .column-header,.filter{
+-fx-background-color:transparent;
+-fx-size:40;
+}
+
+.table-view .column-header .label{
+ -fx-text-fill:#fff;
+ -fx-font-family:"Arial"
+}

@@ -958,7 +958,7 @@ public class DashboardController implements Initializable {
         layout.add(btnSave, 1, 9);
 
         Scene scene = new Scene(layout, 300, 400);
-        scene.getStylesheets().add(getClass().getResource("user.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("dashboard.css").toExternalForm());
         popup_window.setScene(scene);
         popup_window.showAndWait();
     }
@@ -1286,9 +1286,9 @@ public class DashboardController implements Initializable {
 
     }
 
-    public void searchForBills() {
+    public void showListSales() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("hola.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("sales.fxml"));
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             root.setOnMousePressed((event) -> {
@@ -1438,7 +1438,7 @@ public class DashboardController implements Initializable {
         layout.add(btnSave, 1, 9);
 
         Scene scene = new Scene(layout, 300, 400);
-        scene.getStylesheets().add(getClass().getResource("user.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("dashboard.css").toExternalForm());
         popup_window.setScene(scene);
         popup_window.showAndWait();
     }

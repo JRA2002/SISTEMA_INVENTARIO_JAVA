@@ -267,7 +267,7 @@
                            </graphic>
                         </Button>
 
-                        <Button fx:id="bill_clear1" layoutX="12.0" layoutY="13.0" mnemonicParsing="false" onAction="#searchForBills" onMouseClicked="#billClearData" prefHeight="36.0" prefWidth="115.0" styleClass="clear" stylesheets="@dashboard.css" text="VENTAS">
+                        <Button fx:id="bill_clear1" layoutX="12.0" layoutY="13.0" mnemonicParsing="false" onAction="#showListSales" onMouseClicked="#billClearData" prefHeight="36.0" prefWidth="115.0" styleClass="clear" stylesheets="@dashboard.css" text="VENTAS">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="FILE_PDF_ALT" size="18.0" />
                            </graphic>
