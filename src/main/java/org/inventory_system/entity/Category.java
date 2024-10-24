@@ -1,7 +1,7 @@
 package org.inventory_system.entity;
 
 public class Category {
-    private int id;
+    private final int id;
     private String name;
 
     public Category(int id, String name) {
