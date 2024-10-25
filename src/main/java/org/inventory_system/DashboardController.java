@@ -9,6 +9,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
+import org.inventory_system.DAO.User1DAO;
+import org.inventory_system.DAO.UserDAOimp;
+import org.inventory_system.model.User1;
+
+
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
@@ -41,7 +46,6 @@ import java.time.LocalDate;
 import static org.burningwave.core.assembler.StaticComponentContainer.Modules;
 
 public class DashboardController implements Initializable {
-
 
     public FontAwesomeIconView product_print;
 
@@ -326,6 +330,7 @@ public class DashboardController implements Initializable {
 
     ObservableList<Product> productsList;
 
+
     public void onExit() {
         System.exit(0);
     }
@@ -338,6 +343,9 @@ public class DashboardController implements Initializable {
         customer_pane.setVisible(false);
         invoice_pane.setVisible(false);
         purchase_pane.setVisible(false);
+        User1DAO userid = new UserDAOimp();
+        String hello = userid.getUserById();
+        System.out.println(hello);
     }
 
     public void activateAnchorPane() {
@@ -1579,7 +1587,7 @@ public class DashboardController implements Initializable {
         layout.add(btnSave, 1, 9);
 
         Scene scene = new Scene(layout, 300, 400);
-        scene.getStylesheets().add(getClass().getResource("user.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("dashboard.css").toExternalForm());
         popup_window.setScene(scene);
         popup_window.showAndWait();
     }
