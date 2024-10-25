@@ -1,10 +1,6 @@
 package org.inventory_system.DAO;
 
-import org.inventory_system.model.User1;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import org.inventory_system.interfaces.User1DAO;
 
 public class UserDAOimp implements User1DAO {
     @Override

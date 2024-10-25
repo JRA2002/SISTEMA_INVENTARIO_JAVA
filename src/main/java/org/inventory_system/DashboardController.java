@@ -9,9 +9,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
-import org.inventory_system.DAO.User1DAO;
+import org.inventory_system.interfaces.User1DAO;
 import org.inventory_system.DAO.UserDAOimp;
-import org.inventory_system.model.User1;
 
 
 import javafx.scene.control.cell.TextFieldTableCell;

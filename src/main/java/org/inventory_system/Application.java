@@ -9,12 +9,6 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.net.URL;
 
-import org.inventory_system.DAO.User1DAO;
-import org.inventory_system.DAO.UserDAOimp;
-import org.inventory_system.model.User1;
-
-import static org.burningwave.core.assembler.StaticComponentContainer.Modules;
-
 public class Application extends javafx.application.Application {
 
         private double x;
