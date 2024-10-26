@@ -12,12 +12,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ProductDAOImpl extends Database implements ProductDAO {
 
     @Override
-    public ObservableList<Product> getProductsList1() throws SQLException {
+    public ObservableList<Product> getProductsList() throws SQLException {
         ObservableList<Product> productsList = FXCollections.observableArrayList();
         this.connectDB();
 
@@ -57,4 +58,72 @@ public class ProductDAOImpl extends Database implements ProductDAO {
         }
         return productsList;
     }
+
+    @Override
+    public void updateProduct(double price, int qty, String expDate, int suppId, int locId, int id) throws SQLException {
+
+        String sql = "UPDATE products SET price=?, quantity=?, exp_date=?, supp_id=?, loc_id=? WHERE id=?";
+        try{
+            this.connectDB();
+            PreparedStatement statement = this.connection.prepareStatement(sql);
+            statement.setDouble(1, price);
+            statement.setInt(2, qty);
+            statement.setString(3, expDate);
+            statement.setInt(4, suppId);
+            statement.setInt(5, locId);
+            statement.setInt(6, id);
+            statement.executeUpdate();
+        }catch (Exception err){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeight(500);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText(err.getMessage());
+            alert.showAndWait();
+        }finally {
+            this.closeDB();
+        }
+    }
+
+    @Override
+    public void updateProductStock(int prodId, int quantity) throws SQLException {
+        String sql = "UPDATE products SET quantity=? WHERE id=?";
+        try{
+            this.connectDB();
+            PreparedStatement statement = this.connection.prepareStatement(sql);
+            statement.setInt(1, quantity);
+            statement.setInt(2, prodId);
+            statement.executeUpdate();
+        }catch (Exception err){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeight(500);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText(err.getMessage());
+            alert.showAndWait();
+        }finally {
+            this.closeDB();
+        }
+    }
+
+    @Override
+    public void deleteProduct(int prodId) throws SQLException {
+        String sql = "DELETE FROM products WHERE id=?";
+        try{
+            this.connectDB();
+            PreparedStatement statement = this.connection.prepareStatement(sql);
+            statement.setInt(1, prodId);
+            statement.executeUpdate();
+        }catch (Exception err){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeight(500);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText(err.getMessage());
+            alert.showAndWait();
+        }finally {
+            this.closeDB();
+        }
+    }
 }
+

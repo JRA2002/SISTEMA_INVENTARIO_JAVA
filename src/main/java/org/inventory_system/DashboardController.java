@@ -328,8 +328,8 @@ public class DashboardController implements Initializable {
     @FXML
     private Button signout_btn;
 
-    ProductDAO productListDAO = new ProductDAOImpl();
-    ObservableList<Product> productsList = productListDAO.getProductsList1();
+    ProductDAO productDAO = new ProductDAOImpl();
+    ObservableList<Product> productsList = productDAO.getProductsList();
     UserDAO loggedInUser = new UserDAOImpl();
 
     public DashboardController() throws Exception {
@@ -470,11 +470,6 @@ public class DashboardController implements Initializable {
 
     public void setUsername() throws Exception {
         user.setText(loggedInUser.getUsername());
-        System.out.println("aqui esta la lista" + productListDAO);
-
-        for (Product prod : productListDAO.getProductsList1()){
-            System.out.println("every product " + prod);
-        }
     }
 
     private void checkUserRole() {
@@ -509,7 +504,7 @@ public class DashboardController implements Initializable {
 
     public void showProductsData() throws Exception {
         prod_field_search.textProperty().addListener((observable, oldValue, newValue) -> filterProducts(newValue));
-        ObservableList<Product> productsList = productListDAO.getProductsList1();
+        ObservableList<Product> productsList = productDAO.getProductsList();
         prod_col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         prod_col_name.setCellValueFactory(new PropertyValueFactory<>("name"));
         prod_col_pre.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -611,33 +606,24 @@ public class DashboardController implements Initializable {
 
             LocalDate dateSelected = expDate.getValue();
             String date_exp = dateSelected.toString();
-
-            connection = Database.getInstance().connectDB();
-            String sql = "UPDATE products SET price=?, quantity=?, exp_date=?, supp_id=?, loc_id=? WHERE id=?";
             try {
+                productDAO.updateProduct(
+                        Double.parseDouble(prod_field_price.getText()),
+                        Integer.parseInt(prod_field_qty.getText()),
+                        date_exp,
+                        supp_id,
+                        loc_id,
+                        prodID
+                );
 
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setString(1, prod_field_price.getText());
-                preparedStatement.setInt(2, Integer.parseInt(prod_field_qty.getText()));
-                preparedStatement.setString(3, date_exp);
-                preparedStatement.setDouble(4, supp_id);
-                preparedStatement.setInt(5, loc_id);
-                preparedStatement.setInt(6, prodID);
-
-                int result = preparedStatement.executeUpdate();
-                if (result > 0) {
-                    showCustomerData();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("");
-                    alert.showAndWait();
-                }
-            } catch (Exception err) {
-                err.printStackTrace();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
             }
-
+            try {
+                showProductsData();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
             popup_window.close();
         });
         GridPane layout = new GridPane();
@@ -664,13 +650,13 @@ public class DashboardController implements Initializable {
         layout.add(btnSave, 1, 9);
 
         Scene scene = new Scene(layout, 300, 400);
-        scene.getStylesheets().add(getClass().getResource("user.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("dashboard.css").toExternalForm());
         popup_window.setScene(scene);
 
         popup_window.showAndWait();
     }
 
-    public void deleteProduct() {
+    public void deleteProduct() throws Exception {
         if (product_table.getSelectionModel().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Message");
@@ -689,33 +675,9 @@ public class DashboardController implements Initializable {
         Optional<ButtonType> result1 = confirmationAlert.showAndWait();
 
         if (result1.isPresent() && result1.get() == ButtonType.OK) {
-            connection = Database.getInstance().connectDB();
-
-            String sql = "DELETE FROM products WHERE id=?";
-            try {
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setInt(1, product_table.getSelectionModel().getSelectedItem().getId());
-                int result = preparedStatement.executeUpdate();
-
-                if (result > 0) {
-                    showCustomerData();
-
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("No hay productos en la Tabla.");
-                    alert.showAndWait();
-                }
-            } catch (Exception err) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeight(500);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText(err.getMessage());
-                alert.showAndWait();
-            }
-
+            int prodId = product_table.getSelectionModel().getSelectedItem().getId();
+            productDAO.deleteProduct(prodId);
+            showProductsData();
         }
     }
 
@@ -742,29 +704,9 @@ public class DashboardController implements Initializable {
     }
 
     private void updateProductStock(int productId, int quantity) throws Exception {
-        productListDAO.getProductsList1();
+        productDAO.getProductsList();
         int newQty = calculateNewStock(productId, quantity);
-
-        connection = Database.getInstance().connectDB();
-        String sql = "UPDATE products SET quantity=? WHERE id=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, newQty);
-            preparedStatement.setInt(2, productId);
-
-            int result = preparedStatement.executeUpdate();
-            if (result > 0) {
-                System.out.println("update stock");
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText("");
-                alert.showAndWait();
-            }
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
+        productDAO.updateProductStock(productId, newQty);
     }
     public ComboBox<String> comboBoxUnit() {
         ComboBox<String> comboUnit = new ComboBox<>();
