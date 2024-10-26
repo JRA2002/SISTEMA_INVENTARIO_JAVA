@@ -1,8 +1,8 @@
 package org.inventory_system;
 
 import com.password4j.Password;
-import org.inventory_system.entity.User;
-import org.inventory_system.entity.Session;
+import org.inventory_system.model.User;
+import org.inventory_system.model.Session;
 import org.inventory_system.config.Database;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

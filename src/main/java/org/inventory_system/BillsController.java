@@ -1,7 +1,7 @@
 package org.inventory_system;
 
 import org.inventory_system.config.Database;
-import org.inventory_system.entity.Sales;
+import org.inventory_system.model.Sales;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

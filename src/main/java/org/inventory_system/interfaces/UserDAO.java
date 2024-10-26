@@ -1,6 +1,6 @@
 package org.inventory_system.interfaces;
 
-public interface User1DAO {
+public interface UserDAO {
     public String getUserById();
     public String getUsername();
 }

@@ -19,8 +19,8 @@ module org.inventory_system {
 
     opens org.inventory_system to javafx.fxml;
     exports org.inventory_system;
-    exports org.inventory_system.entity;
-    opens org.inventory_system.entity to javafx.fxml;
+    exports org.inventory_system.model;
+    opens org.inventory_system.model to javafx.fxml;
     exports org.inventory_system.config;
     opens org.inventory_system.config to javafx.fxml;
     exports org.inventory_system.app;

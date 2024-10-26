@@ -1,6 +1,8 @@
 package org.inventory_system;
 
-import org.inventory_system.entity.*;
+import org.inventory_system.DAO.ProductDAOImpl;
+import org.inventory_system.interfaces.ProductDAO;
+import org.inventory_system.model.*;
 import org.inventory_system.config.Database;
 import com.password4j.Password;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -9,9 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
-import org.inventory_system.interfaces.User1DAO;
-import org.inventory_system.DAO.UserDAOimp;
-
+import org.inventory_system.interfaces.UserDAO;
+import org.inventory_system.DAO.UserDAOImpl;
 
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
@@ -327,7 +328,12 @@ public class DashboardController implements Initializable {
     @FXML
     private Button signout_btn;
 
-    ObservableList<Product> productsList;
+    ProductDAO productListDAO = new ProductDAOImpl();
+    ObservableList<Product> productsList = productListDAO.getProductsList1();
+    UserDAO loggedInUser = new UserDAOImpl();
+
+    public DashboardController() throws Exception {
+    }
 
 
     public void onExit() {
@@ -342,7 +348,7 @@ public class DashboardController implements Initializable {
         customer_pane.setVisible(false);
         invoice_pane.setVisible(false);
         purchase_pane.setVisible(false);
-        User1DAO userid = new UserDAOimp();
+        UserDAO userid = new UserDAOImpl();
         String hello = userid.getUserById();
         System.out.println(hello);
     }
@@ -462,9 +468,13 @@ public class DashboardController implements Initializable {
         });
     }
 
-    public void setUsername() {
-        User loggedInUser = Session.getCurrentUser();
-        user.setText(loggedInUser.getUsername().toUpperCase());
+    public void setUsername() throws Exception {
+        user.setText(loggedInUser.getUsername());
+        System.out.println("aqui esta la lista" + productListDAO);
+
+        for (Product prod : productListDAO.getProductsList1()){
+            System.out.println("every product " + prod);
+        }
     }
 
     private void checkUserRole() {
@@ -480,41 +490,6 @@ public class DashboardController implements Initializable {
         }
     }
 //==================PRODUCTS METHODS================================
-    private ObservableList<Product> getProductsList(){
-        productsList = FXCollections.observableArrayList();
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT pd.id,pd.name,pd.unit, pd.quantity,pd.price,ct.cat_name,pd.exp_date,ln.loc_name FROM products AS pd \n" +
-                "JOIN category AS ct \n" +
-                "JOIN location AS ln \n" +
-                "WHERE pd.cat_id=ct.id and pd.loc_id=ln.loc_id;";
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-            Product product;
-            while (resultSet.next()) {
-                product = new Product(
-                        Integer.parseInt(resultSet.getString("id")),
-                        resultSet.getString("name"),
-                        resultSet.getString("unit"),
-                        Integer.parseInt(resultSet.getString("quantity")),
-                        Double.parseDouble(resultSet.getString("price")),
-                        resultSet.getString("cat_name"),
-                        resultSet.getDate("exp_date").toLocalDate(),
-                        resultSet.getString("loc_name")
-                );
-                productsList.add(product);
-            }
-        }catch (Exception err) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeight(500);
-            alert.setTitle("Error Message");
-            alert.setHeaderText(null);
-            alert.setContentText(err.getMessage());
-            alert.showAndWait();
-        }
-        prod_field_search.textProperty().addListener((observable, oldValue, newValue) -> filterProducts(newValue));
-        return productsList;
-    }
 
     public void filterProducts(String searchText) {
         ObservableList<Product> filteredList = FXCollections.observableArrayList();
@@ -532,8 +507,9 @@ public class DashboardController implements Initializable {
         }
     }
 
-    public void showProductsData() {
-        ObservableList<Product> productsList = getProductsList();
+    public void showProductsData() throws Exception {
+        prod_field_search.textProperty().addListener((observable, oldValue, newValue) -> filterProducts(newValue));
+        ObservableList<Product> productsList = productListDAO.getProductsList1();
         prod_col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         prod_col_name.setCellValueFactory(new PropertyValueFactory<>("name"));
         prod_col_pre.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -743,7 +719,7 @@ public class DashboardController implements Initializable {
         }
     }
 
-    public void updateProductList() {
+    public void updateProductList() throws Exception {
         showProductsData();
     }
 
@@ -765,8 +741,8 @@ public class DashboardController implements Initializable {
         return newQty;
     }
 
-    private void updateProductStock(int productId, int quantity){
-        getProductsList();
+    private void updateProductStock(int productId, int quantity) throws Exception {
+        productListDAO.getProductsList1();
         int newQty = calculateNewStock(productId, quantity);
 
         connection = Database.getInstance().connectDB();
@@ -1228,7 +1204,7 @@ public class DashboardController implements Initializable {
         }
     }
 
-    public void deleteBillingData() {
+    public void deleteBillingData() throws Exception {
         if (billing_table.getSelectionModel().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Message");
@@ -1726,7 +1702,6 @@ public class DashboardController implements Initializable {
                         Double.parseDouble(resultSet.getString("purch_price")),
                         resultSet.getString("unit"),
                         qty);
-                System.out.println(productPurchase);
                 purchaseList.addAll(productPurchase);
             }
         } catch (Exception err) {
@@ -1758,7 +1733,11 @@ public class DashboardController implements Initializable {
                 if (qty > 0 && !productIdList.contains(pId)) {
                     productIdList.add(pId);
                     insertPurchaseItem(pId, qty);
-                    updateProductStock(pId,qty);
+                    try {
+                        updateProductStock(pId,qty);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 } else if (qty == 0 && productIdList.contains(pId)) {
                     deletePurchaseItem(pId);
                     if (productIdList.isEmpty()) {
@@ -2169,7 +2148,11 @@ public class DashboardController implements Initializable {
         //     DASHBOARD PANE
         showDashboardData();
         activateDashboard();
-        setUsername();
+        try {
+            setUsername();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         search_prod_purchase.setEditable(false);
 
 
@@ -2177,7 +2160,11 @@ public class DashboardController implements Initializable {
         checkUserRole();
         showCustomerData();
 //       PRODUCTS PANE
-        showProductsData();
+        try {
+            showProductsData();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
 //      INVOICE PANE
         showInvoiceData();

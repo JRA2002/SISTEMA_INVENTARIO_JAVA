@@ -1,4 +1,4 @@
-package org.inventory_system.entity;
+package org.inventory_system.model;
 
 public class Billing {
     private String item_number;

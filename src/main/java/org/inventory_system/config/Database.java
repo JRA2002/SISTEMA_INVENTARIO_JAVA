@@ -15,15 +15,18 @@ public class Database {
         return database;
     }
     public Connection connectDB(){
-        Properties dbConfig=new Properties();
+        Properties dbConfig = new Properties();
         try{
             InputStream input=this.getClass().getClassLoader().getResourceAsStream(CONFIG_FILE);
             dbConfig.load(input);
             Class.forName(dbConfig.getProperty("javafx.jdbc.driver"));
-            Connection connection= DriverManager.getConnection(dbConfig.getProperty("javafx.datasource.url"),dbConfig.getProperty("javafx.datasource.username"), dbConfig.getProperty("javafx.datasource.password"));
-            return connection;
-        }catch (Exception exception){
-            exception.printStackTrace();
+            Connection connection =  DriverManager.getConnection(dbConfig.getProperty(
+                    "javafx.datasource.url"),
+                    dbConfig.getProperty("javafx.datasource.username"),
+                    dbConfig.getProperty("javafx.datasource.password"));
+            return  connection;
+        }catch (Exception ex){
+            ex.printStackTrace();
         }
         return null;
     }

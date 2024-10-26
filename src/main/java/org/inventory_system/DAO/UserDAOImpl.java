@@ -1,11 +1,17 @@
 package org.inventory_system.DAO;
 
-import org.inventory_system.interfaces.User1DAO;
+import org.inventory_system.model.Session;
+import org.inventory_system.model.User;
+import org.inventory_system.interfaces.UserDAO;
 
-public class UserDAOimp implements User1DAO {
+public class UserDAOImpl implements UserDAO {
     @Override
     public String getUserById() {
-        String user1 = "hello ther DAO is working";
-        return user1;
+        return "hello everyone theres DAO is working";
+    }
+    @Override
+    public String getUsername(){
+        User loggedInUser = Session.getCurrentUser();
+        return loggedInUser.getUsername().toUpperCase();
     }
 }

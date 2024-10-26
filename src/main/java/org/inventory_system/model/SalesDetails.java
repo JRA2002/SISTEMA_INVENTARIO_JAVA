@@ -1,4 +1,4 @@
-package org.inventory_system.entity;
+package org.inventory_system.model;
 
 public class SalesDetails {
     private int productId;
