@@ -1,6 +1,8 @@
 package org.inventory_system;
 
+import org.inventory_system.DAO.CategoryDAOImpl;
 import org.inventory_system.DAO.ProductDAOImpl;
+import org.inventory_system.interfaces.CategoryDAO;
 import org.inventory_system.interfaces.ProductDAO;
 import org.inventory_system.model.*;
 import org.inventory_system.config.Database;
@@ -549,7 +551,8 @@ public class DashboardController implements Initializable {
         alert.showAndWait();
     }
 
-    public void editProduct() {
+    public void editProduct() throws Exception {
+        CategoryDAO comboCategory = new CategoryDAOImpl();
         if (product_table.getSelectionModel().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Message");
@@ -580,7 +583,7 @@ public class DashboardController implements Initializable {
         TextField prod_field_price = new TextField();
         prod_field_price.setText(String.valueOf(price));
         Label lblCat = new Label("CATEGORIA:");
-        ComboBox<Category> categoryList = comboCategoryData();
+        ComboBox<Category> categoryList = comboCategory.getComboCategory();
         categoryList.setDisable(true);
         Label lblQty = new Label("CANTIDAD:");
         TextField prod_field_qty = new TextField();
