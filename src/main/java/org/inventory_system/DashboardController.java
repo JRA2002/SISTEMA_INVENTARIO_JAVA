@@ -1,8 +1,10 @@
 package org.inventory_system;
 
 import org.inventory_system.DAO.CategoryDAOImpl;
+import org.inventory_system.DAO.LocationDAOImpl;
 import org.inventory_system.DAO.ProductDAOImpl;
 import org.inventory_system.interfaces.CategoryDAO;
+import org.inventory_system.interfaces.LocationDAO;
 import org.inventory_system.interfaces.ProductDAO;
 import org.inventory_system.model.*;
 import org.inventory_system.config.Database;
@@ -331,12 +333,13 @@ public class DashboardController implements Initializable {
     private Button signout_btn;
 
     ProductDAO productDAO = new ProductDAOImpl();
+    CategoryDAO comboCategory = new CategoryDAOImpl();
+    LocationDAO comboLocation = new LocationDAOImpl();
     ObservableList<Product> productsList = productDAO.getProductsList();
     UserDAO loggedInUser = new UserDAOImpl();
 
     public DashboardController() throws Exception {
     }
-
 
     public void onExit() {
         System.exit(0);
@@ -552,7 +555,7 @@ public class DashboardController implements Initializable {
     }
 
     public void editProduct() throws Exception {
-        CategoryDAO comboCategory = new CategoryDAOImpl();
+
         if (product_table.getSelectionModel().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Message");
@@ -594,7 +597,7 @@ public class DashboardController implements Initializable {
         Label lblSupp = new Label("PROVEEDOR:");
         ComboBox<Supplier> supplierCombo = comboSupplierData();
         Label lblLoc = new Label("LUGAR:");
-        ComboBox<Location> locationCombo = comboLocationData();
+        ComboBox<Location> locationCombo = comboLocation.getComboLocation();
 
         Button btnSave = new Button("ACTUALIZAR");
         btnSave.getStyleClass().add("print");
@@ -719,28 +722,6 @@ public class DashboardController implements Initializable {
         return comboUnit;
     }
 
-    public ComboBox<Category> comboCategoryData() {
-        ComboBox<Category> categoryCombo = new ComboBox<>();
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT * FROM category";
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-
-            Category categoryData;
-            while (resultSet.next()) {
-                categoryData = new Category(
-                        Integer.parseInt(resultSet.getString("id")),
-                        resultSet.getString("cat_name"));
-                categoryCombo.getItems().add(categoryData);
-            }
-
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
-        return categoryCombo;
-    }
-
     public ComboBox<Supplier> comboSupplierData() {
         ComboBox<Supplier> supplierCombo = new ComboBox<>();
         connection = Database.getInstance().connectDB();
@@ -765,32 +746,7 @@ public class DashboardController implements Initializable {
         return supplierCombo;
     }
 
-    public ComboBox<Location> comboLocationData() {
-        ComboBox<Location> locationCombo = new ComboBox<>();
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT * FROM location";
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-
-            Location locationData;
-            while (resultSet.next()) {
-                locationData = new Location(
-                        Integer.parseInt(resultSet.getString("loc_id")),
-                        resultSet.getString("loc_name"));
-
-                System.out.println(locationData);
-                locationCombo.getItems().add(locationData);
-            }
-
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
-
-        return locationCombo;
-    }
-
-    public void addProduct() {
+    public void addProduct() throws Exception {
 
         Stage popup_window = new Stage();
         popup_window.initModality(Modality.APPLICATION_MODAL);
@@ -804,7 +760,7 @@ public class DashboardController implements Initializable {
         TextField prod_field_price = new TextField();
         prod_field_price.getStyleClass().add("textfield");
         Label lblCat = new Label("Categoria:");
-        ComboBox<Category> categoryList = comboCategoryData();
+        ComboBox<Category> categoryList = comboCategory.getComboCategory();
         Label lblQty = new Label("Cantidad:");
         TextField prod_field_qty = new TextField();
         Label lblDate = new Label("Vencimiento:");
@@ -812,7 +768,7 @@ public class DashboardController implements Initializable {
         Label lblSupp = new Label("Proveedor:");
         ComboBox<Supplier> supplierCombo = comboSupplierData();
         Label lblLoc = new Label("Location:");
-        ComboBox<Location> locationCombo = comboLocationData();
+        ComboBox<Location> locationCombo = comboLocation.getComboLocation();
 
         Button btnSave = new Button("GUARDAR");
         btnSave.getStyleClass().add("print");

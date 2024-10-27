@@ -30,6 +30,8 @@ public class CategoryDAOImpl extends Database implements CategoryDAO {
 
         } catch (Exception err) {
             err.printStackTrace();
+        }finally {
+            this.closeDB();
         }
         return categoryCombo;
     }
