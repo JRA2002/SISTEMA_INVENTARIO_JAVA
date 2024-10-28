@@ -1,11 +1,7 @@
 package org.inventory_system;
 
-import org.inventory_system.DAO.CategoryDAOImpl;
-import org.inventory_system.DAO.LocationDAOImpl;
-import org.inventory_system.DAO.ProductDAOImpl;
-import org.inventory_system.interfaces.CategoryDAO;
-import org.inventory_system.interfaces.LocationDAO;
-import org.inventory_system.interfaces.ProductDAO;
+import org.inventory_system.DAO.*;
+import org.inventory_system.interfaces.*;
 import org.inventory_system.model.*;
 import org.inventory_system.config.Database;
 import com.password4j.Password;
@@ -14,9 +10,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-
-import org.inventory_system.interfaces.UserDAO;
-import org.inventory_system.DAO.UserDAOImpl;
 
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
@@ -335,6 +328,8 @@ public class DashboardController implements Initializable {
     ProductDAO productDAO = new ProductDAOImpl();
     CategoryDAO comboCategory = new CategoryDAOImpl();
     LocationDAO comboLocation = new LocationDAOImpl();
+    SupplierDAO comboSupplier = new SupplierDAOImpl();
+    SalesDAO salesDAO = new SalesDAOImpl();
     ObservableList<Product> productsList = productDAO.getProductsList();
     UserDAO loggedInUser = new UserDAOImpl();
 
@@ -595,7 +590,7 @@ public class DashboardController implements Initializable {
         DatePicker expDate = new DatePicker();
         expDate.setValue(exp_date);
         Label lblSupp = new Label("PROVEEDOR:");
-        ComboBox<Supplier> supplierCombo = comboSupplierData();
+        ComboBox<Supplier> supplierCombo = comboSupplier.getComboSupplier();
         Label lblLoc = new Label("LUGAR:");
         ComboBox<Location> locationCombo = comboLocation.getComboLocation();
 
@@ -722,30 +717,6 @@ public class DashboardController implements Initializable {
         return comboUnit;
     }
 
-    public ComboBox<Supplier> comboSupplierData() {
-        ComboBox<Supplier> supplierCombo = new ComboBox<>();
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT * FROM supplier";
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-            Supplier supplierData;
-            while (resultSet.next()) {
-                supplierData = new Supplier(
-                        Integer.parseInt(resultSet.getString("id")),
-                        resultSet.getString("supp_name"),
-                        resultSet.getString("phone"));
-                System.out.println(supplierData);
-                supplierCombo.getItems().add(supplierData);
-            }
-
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
-
-        return supplierCombo;
-    }
-
     public void addProduct() throws Exception {
 
         Stage popup_window = new Stage();
@@ -766,7 +737,7 @@ public class DashboardController implements Initializable {
         Label lblDate = new Label("Vencimiento:");
         DatePicker expDate = new DatePicker();
         Label lblSupp = new Label("Proveedor:");
-        ComboBox<Supplier> supplierCombo = comboSupplierData();
+        ComboBox<Supplier> supplierCombo = comboSupplier.getComboSupplier();
         Label lblLoc = new Label("Location:");
         ComboBox<Location> locationCombo = comboLocation.getComboLocation();
 
@@ -788,33 +759,24 @@ public class DashboardController implements Initializable {
             String date_exp = dateSelected.toString();
 
             String unitSelected = comboBoxUnit.getValue();
-
-            connection = Database.getInstance().connectDB();
-            String sql = "INSERT INTO products(name, cat_id,quantity,price,exp_date,unit,supp_id,loc_id)VALUES(?,?,?,?,?,?,?,?)";
             try {
-
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setString(1, prod_field_name.getText());
-                preparedStatement.setInt(2, cat_id);
-                preparedStatement.setInt(3, Integer.parseInt(prod_field_qty.getText()));
-                preparedStatement.setDouble(4, Double.parseDouble(prod_field_price.getText()));
-                preparedStatement.setString(5, date_exp);
-                preparedStatement.setString(6, unitSelected);
-                preparedStatement.setInt(7, supp_id);
-                preparedStatement.setInt(8, loc_id);
-
-                int result = preparedStatement.executeUpdate();
-                if (result > 0) {
-                    showCustomerData();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please fill the mandatory data such as name and price.");
-                    alert.showAndWait();
-                }
-            } catch (Exception err) {
-                err.printStackTrace();
+                productDAO.addProduct(
+                        prod_field_name.getText(),
+                        cat_id,
+                        Integer.parseInt(prod_field_qty.getText()),
+                        Double.parseDouble(prod_field_price.getText()),
+                        date_exp,
+                        unitSelected,
+                        supp_id,
+                        loc_id
+                );
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                showProductsData();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
             popup_window.close();
         });
@@ -856,7 +818,7 @@ public class DashboardController implements Initializable {
         }
     }
 
-    public void createNewSale() {
+    public void createNewSale() throws SQLException {
         if (bill_item.getText().isBlank() || sales_quantity.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Message");
@@ -879,59 +841,12 @@ public class DashboardController implements Initializable {
             alert.showAndWait();
             return;
         }
-        connection = Database.getInstance().connectDB();
-        String sql = "INSERT INTO sales(date,user_id)VALUES(?,?)";
-
-        try {
-            User loggedInUser = Session.getCurrentUser();
-            int userId = loggedInUser.getId();
-            LocalDate date = LocalDate.now();
-            Date dateSale = Date.valueOf(date);
-
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setDate(1, dateSale);
-            preparedStatement.setInt(2, userId);
-
-            int result = preparedStatement.executeUpdate();
-            if (result > 0) {
-                saleCreated = true;
-                System.out.println("heeeree");
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText("Please fill the mandatory data such as name and price.");
-                alert.showAndWait();
-            }
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
-    }
-
-    public void insertNewProductDetailsSales(int salesId, int productId, int quantity) {
-        connection = Database.getInstance().connectDB();
-        String sql = "INSERT INTO details_sales(sales_id,quantity,product_id)VALUES(?,?,?)";
-
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, salesId);
-            preparedStatement.setInt(2, quantity);
-            preparedStatement.setInt(3, productId);
-
-            int result = preparedStatement.executeUpdate();
-            if (result > 0) {
-                System.out.println("heeeree in details");
-                updateProductStock(productId, quantity);
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText("Please fill the mandatory data such as name and price.");
-                alert.showAndWait();
-            }
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
+        User loggedInUser = Session.getCurrentUser();
+        int userId = loggedInUser.getId();
+        LocalDate date = LocalDate.now();
+        Date dateSale = Date.valueOf(date);
+        salesDAO.insertNewSale(String.valueOf(dateSale), userId);
+        saleCreated = true;
     }
 
     public int getSalesId() {
@@ -961,7 +876,7 @@ public class DashboardController implements Initializable {
         return productsList.stream().anyMatch(product -> product.getId() == productId);
     }
 
-    public void addProductBilling() {
+    public void addProductSales() throws SQLException {
 
         int productId = Integer.parseInt(bill_item.getText());
         int quantity = Integer.parseInt(sales_quantity.getText());
@@ -976,7 +891,7 @@ public class DashboardController implements Initializable {
                 alert.setHeaderText(null);
                 alert.setContentText("PRODUCT ID INVALIDO");
                 alert.showAndWait();
-                billClearData();
+                salesClearData();
                 return;
             } else if (actualStock <= 0) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -987,115 +902,47 @@ public class DashboardController implements Initializable {
                     return;
             }
             int salId = getSalesId();
-            insertNewProductDetailsSales(salId, productId, quantity);
-
-
+            salesDAO.insertNewDetailsSales(salId, productId, quantity);
         } catch (Exception err) {
             err.printStackTrace();
         }
-        billClearData();
-        showBillingData();
+        salesClearData();
+        showSalesData();
     }
 
-    public ObservableList<SalesDetails> listBillingData(int salesId) {
-        ObservableList<SalesDetails> billingList = FXCollections.observableArrayList();
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT p.id,ds.quantity,p.name, p.price,(p.price*ds.quantity) AS subtotal " +
-                "FROM details_sales AS ds " +
-                "JOIN products AS p ON ds.product_id=p.id\n" +
-                "WHERE ds.sales_id=?;";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, salesId);
-            resultSet = preparedStatement.executeQuery();
-
-            SalesDetails billingData;
-            while(resultSet.next()) {
-                billingData = new SalesDetails(
-                        Integer.parseInt(resultSet.getString("id")),
-                        resultSet.getString("name"),
-                        Integer.parseInt(resultSet.getString("quantity")),
-                        Double.parseDouble(resultSet.getString("price")),
-                        Double.parseDouble(resultSet.getString("subtotal")));
-                billingList.addAll(billingData);
-            }
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
-
-        return billingList;
-    }
-
-    public void calculateFinalAmount() {
+    public void calculateFinalAmount() throws SQLException {
         int salId = getSalesId();
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT ds.sales_id,SUM(ds.quantity*p.price) AS final_amount " +
-                "FROM details_sales AS ds JOIN products AS p\n" +
-                "WHERE ds.product_id=p.id and ds.sales_id=?;";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, salId);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                final_amount.setText(resultSet.getString("final_amount"));
-            }
-
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
-
+        final_amount.setText(String.valueOf(salesDAO.calculateFinalAmount(salId)));
     }
 
-    public void showBillingData(){
+    public void showSalesData() throws SQLException {
         int salId = getSalesId();
-        ObservableList<SalesDetails> billingList = listBillingData(salId);
+        ObservableList<SalesDetails> salesList = salesDAO.getSalesList(salId);
         col_bill_item_num.setCellValueFactory(new PropertyValueFactory<>("productId"));
         col_bill_item_name.setCellValueFactory(new PropertyValueFactory<>("productName"));
         col_bill_quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         col_bill_price.setCellValueFactory(new PropertyValueFactory<>("prodPrice"));
         col_bill_total_amt.setCellValueFactory(new PropertyValueFactory<>("subTotal"));
-        billing_table.setItems(billingList);
+        billing_table.setItems(salesList);
 
-        if (!billingList.isEmpty()) {
+        if (!salesList.isEmpty()) {
             calculateFinalAmount();
         } else {
             final_amount.setText("0.00");
         }
     }
 
-    public void billClearData() {
+    public void salesClearData() {
         bill_item.clear();
         sales_quantity.clear();
     }
 
-    public void billCancelSale() {
+    public void cancelSale() {
         int salId = getSalesId();
         if (salId != 0) {
-            connection = Database.getInstance().connectDB();
-            String sql = "DELETE FROM sales WHERE sales_id=?";
-            try {
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setInt(1, salId);
-                int result = preparedStatement.executeUpdate();
-
-                if (result > 0) {
-                    billClearData();
-                    billing_table.getItems().clear();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("No hay datos en la Tabla.");
-                    alert.showAndWait();
-                }
-            } catch (Exception err) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeight(500);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText(err.getMessage());
-                alert.showAndWait();
-            }
+            salesDAO.deleteSale(salId);
+            salesClearData();
+            billing_table.getItems().clear();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
@@ -1105,7 +952,7 @@ public class DashboardController implements Initializable {
         }
     }
 
-    public void deleteBillingData() throws Exception {
+    public void deleteSalesData() throws Exception {
         if (billing_table.getSelectionModel().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Message");
@@ -1116,37 +963,11 @@ public class DashboardController implements Initializable {
         }
         int prodId = billing_table.getSelectionModel().getSelectedItem().getProductId();
         int qtyUpdate = billing_table.getSelectionModel().getSelectedItem().getQuantity();
-
         int salId = getSalesId();
-        billing_table.getSelectionModel().getSelectedItem().setQuantity(400);
-        connection = Database.getInstance().connectDB();
-        String sql = "DELETE FROM details_sales WHERE product_id=? and sales_id=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, billing_table.getSelectionModel().getSelectedItem().getProductId());
-            preparedStatement.setInt(2, salId);
-            int result = preparedStatement.executeUpdate();
-
-            if (result > 0) {
-                showCustomerData();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Message");
-                alert.setHeaderText(null);
-                alert.setContentText("No hay datos en la Tabla.");
-                alert.showAndWait();
-            }
-        } catch (Exception err) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeight(500);
-            alert.setTitle("Error Message");
-            alert.setHeaderText(null);
-            alert.setContentText(err.getMessage());
-            alert.showAndWait();
-        }
+        salesDAO.deleteSalesDetails(prodId, salId);
         saleDeleted = true;
         updateProductStock(prodId, qtyUpdate);
-        showBillingData();
+        showSalesData();
     }
 
     public void billSave() {

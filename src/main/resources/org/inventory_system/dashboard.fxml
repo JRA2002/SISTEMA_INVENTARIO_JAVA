@@ -222,7 +222,7 @@
                            <font>
                               <Font name="Dubai Bold" size="16.0" />
                            </font></Button>
-                        <Button fx:id="bill_clear" layoutX="480.0" layoutY="570.0" mnemonicParsing="false" onAction="#billCancelSale" onMouseClicked="#billCancelSale" prefHeight="50.0" prefWidth="150.0" styleClass="clear" stylesheets="@dashboard.css" text="CANCELAR">
+                        <Button fx:id="bill_clear" layoutX="480.0" layoutY="570.0" mnemonicParsing="false" onAction="#cancelSale" onMouseClicked="#cancelSale" prefHeight="50.0" prefWidth="150.0" styleClass="clear" stylesheets="@dashboard.css" text="CANCELAR">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="REMOVE" size="24.0" text="" />
                            </graphic>
@@ -230,7 +230,7 @@
                               <Font name="Dubai Bold" size="16.0" />
                            </font></Button>
 
-                        <Button fx:id="bill_add" alignment="CENTER" layoutX="644.0" layoutY="570.0" mnemonicParsing="false" onAction="#addProductBilling" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="AGREGAR">
+                        <Button fx:id="bill_add" alignment="CENTER" layoutX="644.0" layoutY="570.0" mnemonicParsing="false" onAction="#addProductSales" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="AGREGAR">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="PLUS_CIRCLE" size="24.0" text="" />
                            </graphic>
@@ -261,13 +261,13 @@
                         </Label>
                         <TextField fx:id="sales_quantity" layoutX="554.0" layoutY="420.0" prefHeight="32.0" prefWidth="180.0" promptText="Ingrese Cantidad" styleClass="textfield" stylesheets="@dashboard.css" />
 
-                        <Button fx:id="bill_delete" alignment="CENTER" layoutX="743.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#deleteBillingData" prefHeight="38.0" prefWidth="50.0" styleClass="add" stylesheets="@dashboard.css">
+                        <Button fx:id="bill_delete" alignment="CENTER" layoutX="743.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#deleteSalesData" prefHeight="38.0" prefWidth="50.0" styleClass="add" stylesheets="@dashboard.css">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="MINUS_CIRCLE" size="24.0" />
                            </graphic>
                         </Button>
 
-                        <Button fx:id="bill_clear1" layoutX="12.0" layoutY="13.0" mnemonicParsing="false" onAction="#showListSales" onMouseClicked="#billClearData" prefHeight="36.0" prefWidth="115.0" styleClass="clear" stylesheets="@dashboard.css" text="VENTAS">
+                        <Button fx:id="bill_clear1" layoutX="12.0" layoutY="13.0" mnemonicParsing="false" onAction="#showListSales" onMouseClicked="#salesClearData" prefHeight="36.0" prefWidth="115.0" styleClass="clear" stylesheets="@dashboard.css" text="VENTAS">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="FILE_PDF_ALT" size="18.0" />
                            </graphic>

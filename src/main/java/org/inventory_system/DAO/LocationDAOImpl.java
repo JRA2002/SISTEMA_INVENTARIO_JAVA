@@ -26,7 +26,6 @@ public class LocationDAOImpl extends Database implements LocationDAO {
                         resultSet.getString("loc_name"));
                 comboLocation.getItems().add(locationData);
             }
-
         } catch (Exception err) {
             err.printStackTrace();
         }finally {

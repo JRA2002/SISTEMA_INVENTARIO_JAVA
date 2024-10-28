@@ -11,4 +11,5 @@ public interface ProductDAO {
     void updateProduct(double price, int qty, String expDate, int suppId, int locId, int id) throws SQLException;
     void updateProductStock(int prodId, int quantity) throws SQLException;
     void deleteProduct(int prodId) throws SQLException;
+    void addProduct(String name, int catId, int quantity, double price, String expDate, String unit, int suppId, int locId) throws  SQLException;
 }

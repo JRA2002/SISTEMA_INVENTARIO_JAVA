@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import org.inventory_system.DAO.Database;
+import org.inventory_system.model.Location;
 import org.inventory_system.model.Product;
 import org.inventory_system.interfaces.ProductDAO;
 
@@ -115,6 +116,35 @@ public class ProductDAOImpl extends Database implements ProductDAO {
             statement.setInt(1, prodId);
             statement.executeUpdate();
         }catch (Exception err){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeight(500);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText(err.getMessage());
+            alert.showAndWait();
+        }finally {
+            this.closeDB();
+        }
+    }
+
+    @Override
+    public void addProduct(String name, int catId, int quantity, double price, String expDate, String unit, int suppId, int locId) throws SQLException {
+        try{
+            this.connectDB();
+
+            String sql = "INSERT INTO products(name, cat_id, quantity, price, exp_date, unit, supp_id, loc_id)VALUES(?,?,?,?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = this.connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            preparedStatement.setInt(2, catId);
+            preparedStatement.setInt(3, quantity);
+            preparedStatement.setDouble(4, price);
+            preparedStatement.setString(5, expDate);
+            preparedStatement.setString(6, unit);
+            preparedStatement.setInt(7, suppId);
+            preparedStatement.setInt(8, locId);
+            preparedStatement.executeUpdate();
+        } catch (Exception err) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeight(500);
             alert.setTitle("Error Message");
