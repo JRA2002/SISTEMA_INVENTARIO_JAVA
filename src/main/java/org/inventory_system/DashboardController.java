@@ -40,6 +40,7 @@ import net.sf.jasperreports.view.JasperViewer;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
+
 import static org.burningwave.core.assembler.StaticComponentContainer.Modules;
 
 public class DashboardController implements Initializable {
@@ -62,7 +63,7 @@ public class DashboardController implements Initializable {
     private AnchorPane billing_pane;
 
     @FXML
-    private Button customer_btn;
+    private Button user_btn;
 
     @FXML
     private Button invoice_btn;
@@ -71,7 +72,7 @@ public class DashboardController implements Initializable {
     private Button dashboard_btn;
 
     @FXML
-    private AnchorPane customer_pane;
+    private AnchorPane user_pane;
 
     @FXML
     private AnchorPane product_pane;
@@ -83,7 +84,7 @@ public class DashboardController implements Initializable {
     private AnchorPane invoice_pane;
 
     @FXML
-    private AnchorPane dasboard_pane;
+    private AnchorPane dashboard_pane;
 
     @FXML
     private Button purchase_btn;
@@ -168,35 +169,32 @@ public class DashboardController implements Initializable {
     private TableColumn<?, ?> col_bill_total_amt;
 
     @FXML
-    private Button cust_btn_add;
+    private Button usr_btn_add;
 
     private boolean saleCreated = false;
     private boolean purchaseCreated = false;
     private boolean saleDeleted = false;
 
     @FXML
-    private Button cust_btn_delete;
+    private Button usr_btn_delete;
 
     @FXML
-    private Button cust_btn_edit;
+    private Button usr_btn_edit;
 
     @FXML
-    private TableView<User> customer_table;
+    private TableView<User> user_table;
 
     @FXML
-    private TableColumn<?, ?> cust_col_id;
+    private TableColumn<?, ?> usr_col_username;
 
     @FXML
-    private TableColumn<?, ?> cust_col_username;
+    private TableColumn<?, ?> usr_col_email;
 
     @FXML
-    private TableColumn<?, ?> cust_col_email;
+    private TableColumn<?, ?> usr_col_rol;
 
     @FXML
-    private TableColumn<?, ?> cust_col_rol;
-
-    @FXML
-    private TableColumn<?, ?> cust_col_phone;
+    private TableColumn<?, ?> usr_col_phone;
 
     @FXML
     private TableView<Product> product_table;
@@ -283,6 +281,7 @@ public class DashboardController implements Initializable {
 
     @FXML
     private TableColumn<?, ?> purchase_col_prod;
+
     @FXML
     private TableColumn<?, ?> purchase_col_unit;
 
@@ -330,8 +329,9 @@ public class DashboardController implements Initializable {
     LocationDAO comboLocation = new LocationDAOImpl();
     SupplierDAO comboSupplier = new SupplierDAOImpl();
     SalesDAO salesDAO = new SalesDAOImpl();
+    UserDAO userDAO = new UserDAOImpl();
+    PurchaseDAO purchaseDAO = new PurchaseDAOImpl();
     ObservableList<Product> productsList = productDAO.getProductsList();
-    UserDAO loggedInUser = new UserDAOImpl();
 
     public DashboardController() throws Exception {
     }
@@ -341,11 +341,11 @@ public class DashboardController implements Initializable {
     }
 
     public void activateDashboard(){
-        dasboard_pane.setVisible(true);
+        dashboard_pane.setVisible(true);
         billing_pane.setVisible(false);
         product_pane.setVisible(false);
         new_inventory_pane.setVisible(false);
-        customer_pane.setVisible(false);
+        user_pane.setVisible(false);
         invoice_pane.setVisible(false);
         purchase_pane.setVisible(false);
         UserDAO userid = new UserDAOImpl();
@@ -355,112 +355,112 @@ public class DashboardController implements Initializable {
 
     public void activateAnchorPane() {
         dashboard_btn.setOnMouseClicked(mouseEvent -> {
-            dasboard_pane.setVisible(true);
+            dashboard_pane.setVisible(true);
             product_pane.setVisible(false);
             new_inventory_pane.setVisible(false);
             billing_pane.setVisible(false);
-            customer_pane.setVisible(false);
+            user_pane.setVisible(false);
             invoice_pane.setVisible(false);
             purchase_pane.setVisible(false);
             dashboard_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.7),  rgba(255,106,239,0.7))");
             billing_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             product_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             new_inventory_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
-            customer_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
+            user_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             invoice_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             purchase_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
         });
         billing_btn.setOnMouseClicked(mouseEvent -> {
-            dasboard_pane.setVisible(false);
+            dashboard_pane.setVisible(false);
             billing_pane.setVisible(true);
             product_pane.setVisible(false);
             new_inventory_pane.setVisible(false);
-            customer_pane.setVisible(false);
+            user_pane.setVisible(false);
             invoice_pane.setVisible(false);
             purchase_pane.setVisible(false);
             dashboard_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             billing_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.7),  rgba(255,106,239,0.7))");
-            customer_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
+            user_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             invoice_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             new_inventory_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             product_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             purchase_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
         });
         product_btn.setOnMouseClicked(mouseEvent -> {
-            dasboard_pane.setVisible(false);
+            dashboard_pane.setVisible(false);
             billing_pane.setVisible(false);
             product_pane.setVisible(true);
             new_inventory_pane.setVisible(false);
-            customer_pane.setVisible(false);
+            user_pane.setVisible(false);
             invoice_pane.setVisible(false);
             purchase_pane.setVisible(false);
             new_inventory_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             product_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.7),  rgba(255,106,239,0.7))");
             dashboard_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             billing_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
-            customer_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
+            user_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             invoice_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             purchase_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
         });
         new_inventory_btn.setOnMouseClicked(mouseEvent -> {
-            dasboard_pane.setVisible(false);
+            dashboard_pane.setVisible(false);
             billing_pane.setVisible(false);
             product_pane.setVisible(false);
             new_inventory_pane.setVisible(true);
-            customer_pane.setVisible(false);
+            user_pane.setVisible(false);
             invoice_pane.setVisible(false);
             purchase_pane.setVisible(false);
             dashboard_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             billing_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
-            customer_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
+            user_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             invoice_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             new_inventory_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.7),  rgba(255,106,239,0.7))");
             product_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             purchase_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
         });
-        customer_btn.setOnMouseClicked(mouseEvent -> {
-            dasboard_pane.setVisible(false);
+        user_btn.setOnMouseClicked(mouseEvent -> {
+            dashboard_pane.setVisible(false);
             billing_pane.setVisible(false);
             product_pane.setVisible(false);
             new_inventory_pane.setVisible(false);
-            customer_pane.setVisible(true);
+            user_pane.setVisible(true);
             invoice_pane.setVisible(false);
             purchase_pane.setVisible(false);
             dashboard_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             billing_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
-            customer_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.7),  rgba(255,106,239,0.7))");
+            user_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.7),  rgba(255,106,239,0.7))");
             invoice_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             new_inventory_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             product_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             purchase_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
         });
         invoice_btn.setOnMouseClicked(mouseEvent -> {
-            dasboard_pane.setVisible(false);
+            dashboard_pane.setVisible(false);
             billing_pane.setVisible(false);
             product_pane.setVisible(false);
             new_inventory_pane.setVisible(false);
-            customer_pane.setVisible(false);
+            user_pane.setVisible(false);
             invoice_pane.setVisible(true);
             purchase_pane.setVisible(false);
             dashboard_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             billing_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
-            customer_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
+            user_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             invoice_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.7),  rgba(255,106,239,0.7))");
             new_inventory_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             product_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             purchase_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
         });
         purchase_btn.setOnMouseClicked(mouseEvent -> {
-            dasboard_pane.setVisible(false);
+            dashboard_pane.setVisible(false);
             billing_pane.setVisible(false);
             product_pane.setVisible(false);
             new_inventory_pane.setVisible(false);
-            customer_pane.setVisible(false);
+            user_pane.setVisible(false);
             invoice_pane.setVisible(false);
             purchase_pane.setVisible(true);
             dashboard_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             billing_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
-            customer_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
+            user_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             invoice_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             new_inventory_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
             product_btn.setStyle("-fx-background-color:linear-gradient(to bottom right , rgba(121,172,255,0.2),  rgba(255,106,239,0.2))");
@@ -469,19 +469,19 @@ public class DashboardController implements Initializable {
     }
 
     public void setUsername() throws Exception {
-        user.setText(loggedInUser.getUsername());
+        user.setText(userDAO.getUsername());
     }
 
     private void checkUserRole() {
         User loggedInUser = Session.getCurrentUser();
         if ("admin".equals(loggedInUser.getRol())) {
-            cust_btn_add.setVisible(true);
-            cust_btn_delete.setVisible(true);
-            cust_btn_edit.setVisible(true);
+            usr_btn_add.setVisible(true);
+            usr_btn_delete.setVisible(true);
+            usr_btn_edit.setVisible(true);
         } else {
-            cust_btn_add.setVisible(false);
-            cust_btn_delete.setVisible(false);
-            cust_btn_edit.setVisible(false);
+            usr_btn_add.setVisible(false);
+            usr_btn_delete.setVisible(false);
+            usr_btn_edit.setVisible(false);
         }
     }
 //==================PRODUCTS METHODS================================
@@ -970,7 +970,7 @@ public class DashboardController implements Initializable {
         showSalesData();
     }
 
-    public void billSave() {
+    public void saleSave() {
 
         if (!billing_table.getItems().isEmpty()) {
             saleCreated = false;
@@ -988,7 +988,6 @@ public class DashboardController implements Initializable {
             alert.setContentText("Agregue productos para realizar la venta");
             alert.showAndWait();
         }
-
     }
 
     public void showListSales() {
@@ -1017,39 +1016,13 @@ public class DashboardController implements Initializable {
         }
     }
 
-    public ObservableList<User> listCustomerData() {
-        ObservableList<User> customersList = FXCollections.observableArrayList();
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT * FROM users";
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-
-            User customer;
-            while (resultSet.next()) {
-                customer = new User(
-                        Integer.parseInt(resultSet.getString("id")),
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        resultSet.getString("phone"),
-                        resultSet.getString("email"),
-                        resultSet.getString("rol"));
-                customersList.add(customer);
-            }
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
-        return customersList;
-    }
-
-    public void showCustomerData() {
-        ObservableList<User> customerList = listCustomerData();
-
-        cust_col_username.setCellValueFactory(new PropertyValueFactory<>("username"));
-        cust_col_phone.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        cust_col_email.setCellValueFactory(new PropertyValueFactory<>("email"));
-        cust_col_rol.setCellValueFactory(new PropertyValueFactory<>("rol"));
-        customer_table.setItems(customerList);
+    public void showUsersData() {
+        ObservableList<User> userList = userDAO.getUsersList();
+        usr_col_username.setCellValueFactory(new PropertyValueFactory<>("username"));
+        usr_col_phone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        usr_col_email.setCellValueFactory(new PropertyValueFactory<>("email"));
+        usr_col_rol.setCellValueFactory(new PropertyValueFactory<>("rol"));
+        user_table.setItems(userList);
     }
 
     private ComboBox<String> comboRol() {
@@ -1083,43 +1056,41 @@ public class DashboardController implements Initializable {
         btnSave.setOnAction(e -> {
 
             String rol = rolList.getValue();
-            if (checkForUserAvailability(usr_field_username.getText()) && checkForEmailAvailability(usr_field_email.getText())) {
+            if (!checkForUserAvailability(usr_field_username.getText()) && !checkForEmailAvailability(usr_field_email.getText())) {
                 if (checkPassword(usr_field_pass1.getText(), usr_field_pass2.getText())) {
                     String hashedPassword = Password.hash(usr_field_pass1.getText()).withBcrypt().getResult();
-                    Connection connection = Database.getInstance().connectDB();
-                    String sql = "INSERT INTO users(username,password,email,phone,rol) VALUES(?,?,?,?,?)";
+
                     try {
-                        preparedStatement = connection.prepareStatement(sql);
-                        preparedStatement.setString(1, usr_field_username.getText());
-                        preparedStatement.setString(2, hashedPassword);
-                        preparedStatement.setString(3, usr_field_email.getText());
-                        preparedStatement.setString(4, usr_field_phone.getText());
-                        preparedStatement.setString(5, rol);
-                        int result = preparedStatement.executeUpdate();
-                        if (result > 0) {
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setTitle("Message");
-                            alert.setHeaderText(null);
-                            alert.setContentText("USUARIO CREADO CORRECTAMENTE.");
-                            alert.showAndWait();
-                            btnSave.getScene().getWindow().hide();
-                            showCustomerData();
-                        }
-                    } catch (Exception err) {
-                        err.printStackTrace();
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Message");
-                        alert.setHeaderText(null);
-                        alert.setContentText(err.getMessage());
-                        alert.showAndWait();
+                        userDAO.createNewUser(
+                                usr_field_username.getText(),
+                                hashedPassword,
+                                usr_field_email.getText(),
+                                usr_field_phone.getText(),
+                                rol
+                                );
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
                     }
-                } else {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("USUARIO CREADO CORRECTAMENTE.");
+                    alert.showAndWait();
+                    btnSave.getScene().getWindow().hide();
+                    showUsersData();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Message");
                     alert.setHeaderText(null);
                     alert.setContentText("Las password deben ser iguales.");
                     alert.showAndWait();
                 }
+            }else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText(null);
+                alert.setContentText("USUARIO Y/O EMAIL YA EXISTEN.");
+                alert.showAndWait();
             }
         });
 
@@ -1152,54 +1123,20 @@ public class DashboardController implements Initializable {
         return usr_field_pass1.equals(usr_field_pass2);
     }
 
-    public boolean checkForUserAvailability(String usr_field_username) {
-        Connection connection = Database.getInstance().connectDB();
-        String sql = "SELECT username FROM users WHERE username=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, usr_field_username);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Message");
-                alert.setHeaderText(null);
-                alert.setContentText("Nombre de usuario ya registrado.");
-                alert.showAndWait();
-                return false;
-            } else {
-                return true;
-            }
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
-        return false;
+    public boolean checkForUserAvailability(String username) {
+        ObservableList<User> userList = userDAO.getUsersList();
+        return userList.stream()
+                .anyMatch(user -> user.getUsername().contains(username));
     }
 
-    public boolean checkForEmailAvailability(String usr_field_email) {
-        Connection connection = Database.getInstance().connectDB();
-        String sql = "SELECT email FROM users WHERE email=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, usr_field_email);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Message");
-                alert.setHeaderText(null);
-                alert.setContentText("Email ya esta registrado.");
-                alert.showAndWait();
-                return false;
-            } else {
-                return true;
-            }
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
-        return false;
+    public boolean checkForEmailAvailability(String email) {
+        ObservableList<User> userList = userDAO.getUsersList();
+        return userList.stream()
+                .anyMatch(user -> user.getEmail().contains(email));
     }
 
     public void updateUserData() {
-        if (customer_table.getSelectionModel().isEmpty()) {
+        if (user_table.getSelectionModel().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Message");
             alert.setHeaderText(null);
@@ -1207,10 +1144,10 @@ public class DashboardController implements Initializable {
             alert.showAndWait();
             return;
         }
-        String user = customer_table.getSelectionModel().getSelectedItem().getUsername();
-        String email = customer_table.getSelectionModel().getSelectedItem().getEmail();
-        String phone = customer_table.getSelectionModel().getSelectedItem().getPhone();
-        String rol = customer_table.getSelectionModel().getSelectedItem().getRol();
+        String user = user_table.getSelectionModel().getSelectedItem().getUsername();
+        String email = user_table.getSelectionModel().getSelectedItem().getEmail();
+        String phone = user_table.getSelectionModel().getSelectedItem().getPhone();
+        String rol = user_table.getSelectionModel().getSelectedItem().getRol();
 
         Stage popup_window = new Stage();
         popup_window.initModality(Modality.APPLICATION_MODAL);
@@ -1238,32 +1175,31 @@ public class DashboardController implements Initializable {
         btnSave.getStyleClass().add("print");
         btnSave.setOnAction(e -> {
             String roln = rolList.getValue();
-            Connection connection = Database.getInstance().connectDB();
-            String sql = "UPDATE users SET email=? ,phone=?, rol=? ,password=? WHERE username='" + user + "'";
-            try {
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setString(1, usr_field_email.getText());
-                preparedStatement.setString(2, usr_field_phone.getText());
-                preparedStatement.setString(3, roln);
-                preparedStatement.setString(4, usr_field_pass1.getText());
-                int result = preparedStatement.executeUpdate();
-                if (result > 0) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                if (checkPassword(usr_field_pass1.getText(), usr_field_pass2.getText())) {
+                    String hashedPassword = Password.hash(usr_field_pass1.getText()).withBcrypt().getResult();
+                    try {
+                        userDAO.updateUser(
+                                user,
+                                usr_field_email.getText(),
+                                usr_field_phone.getText(),
+                                roln,
+                                hashedPassword
+                        );
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    btnSave.getScene().getWindow().hide();
+                    showUsersData();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Message");
                     alert.setHeaderText(null);
-                    alert.setContentText("USUARIO ACTUALIZADO CORRECTAMENTE.");
+                    alert.setContentText("Las password deben ser iguales.");
                     alert.showAndWait();
-                    btnSave.getScene().getWindow().hide();
-                    showCustomerData();
                 }
-            } catch (Exception err) {
-                err.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Message");
-                alert.setHeaderText(null);
-                alert.setContentText(err.getMessage());
-                alert.showAndWait();
-            }
+            btnSave.getScene().getWindow().hide();
+            showUsersData();
+
         });
         GridPane layout = new GridPane();
         layout.setPadding(new Insets(20));
@@ -1289,8 +1225,8 @@ public class DashboardController implements Initializable {
         popup_window.showAndWait();
     }
 
-    public void deleteCustomerData() {
-        if (customer_table.getSelectionModel().isEmpty()) {
+    public void deleteUser() {
+        if (user_table.getSelectionModel().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Message");
             alert.setHeaderText(null);
@@ -1298,39 +1234,17 @@ public class DashboardController implements Initializable {
             alert.showAndWait();
             return;
         }
-        String customerName = customer_table.getSelectionModel().getSelectedItem().getUsername();
+        String userName = user_table.getSelectionModel().getSelectedItem().getUsername();
 
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setTitle("Delete Confirmation");
-        confirmationAlert.setHeaderText("Esta  seguro de eliminar a este usuario?");
-        confirmationAlert.setContentText("usuario: " + customerName.toUpperCase());
-
+        confirmationAlert.setHeaderText("Esta seguro de eliminar a este usuario ?");
+        confirmationAlert.setContentText("usuario: " + userName.toUpperCase());
         Optional<ButtonType> result1 = confirmationAlert.showAndWait();
 
         if (result1.isPresent() && result1.get() == ButtonType.OK) {
-            connection = Database.getInstance().connectDB();
-            String sql = "DELETE FROM users WHERE username=?";
-            try {
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setString(1, customer_table.getSelectionModel().getSelectedItem().getUsername());
-                int result = preparedStatement.executeUpdate();
-                if (result > 0) {
-                    showCustomerData();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("No hay datos en la Tabla.");
-                    alert.showAndWait();
-                }
-            } catch (Exception err) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeight(500);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText(err.getMessage());
-                alert.showAndWait();
-            }
+            userDAO.deleteUser(userName);
+            showUsersData();
         }
     }
 
@@ -1352,41 +1266,14 @@ public class DashboardController implements Initializable {
 
     //------------------------INVOICE METHODS-------------------------
 
-    private ObservableList<Purchase> getListInvoice() {
-        ObservableList<Purchase> invoiceList = FXCollections.observableArrayList();
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT pu.purchase_id,pu.date,u.username ,SUM(p.purch_price*dp.quantity) AS total FROM purchases pu\n" +
-                "INNER JOIN details_purchases AS dp ON pu.purchase_id=dp.purchase_id\n" +
-                "INNER JOIN products AS p ON dp.product_id=p.id\n" +
-                "INNER JOIN users AS u ON pu.user_id=u.id\n" +
-                "GROUP BY pu.purchase_id";
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-
-            Purchase invoice;
-            while (resultSet.next()) {
-                invoice = new Purchase(
-                        resultSet.getInt("purchase_id"),
-                        resultSet.getDate("date").toLocalDate(),
-                        resultSet.getString("username"),
-                        resultSet.getDouble("total"));
-                invoiceList.add(invoice);
-            }
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
-        return invoiceList;
-    }
-
-    private void showInvoiceData() {
-        ObservableList<Purchase> invoiceList = getListInvoice();
+    private void showInvoiceData() throws SQLException {
+        ObservableList<Purchase> purchaseList = purchaseDAO.getPurchaseList();
 
         invoice_col_id.setCellValueFactory(new PropertyValueFactory<>("purchId"));
         invoice_col_username.setCellValueFactory(new PropertyValueFactory<>("userName"));
         invoice_col_date.setCellValueFactory(new PropertyValueFactory<>("dateOfPurchase"));
         invoice_col_total.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
-        invoice_table.setItems(invoiceList);
+        invoice_table.setItems(purchaseList);
     }
 
     public void filterProductsToPurchase(String searchText) {
@@ -1404,37 +1291,10 @@ public class DashboardController implements Initializable {
         }
     }
 
-    public ObservableList<Product> listProductsToPurchase() {
-
-        ObservableList<Product> purchaseList = FXCollections.observableArrayList();
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT p.id,p.name,sp.supp_name,p.purch_price,p.unit\n" +
-                "FROM products AS p\n" +
-                "INNER JOIN supplier AS sp ON p.supp_id=sp.id";
-        try {
-            int qty = 0;
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-            Product productPurchase;
-            while (resultSet.next()) {
-                productPurchase = new Product(
-                        Integer.parseInt(resultSet.getString("id")),
-                        resultSet.getString("name"),
-                        resultSet.getString("supp_name"),
-                        Double.parseDouble(resultSet.getString("purch_price")),
-                        resultSet.getString("unit"),
-                        qty);
-                purchaseList.addAll(productPurchase);
-            }
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
-        search_prod_purchase.textProperty().addListener((observable, oldValue, newValue) -> filterProductsToPurchase(newValue));
-        return purchaseList;
-    }
     //========================PURCHASE METHODS============================
-    public void showProductsToPurchase(boolean status) {
-        ObservableList<Product> purchaseList = listProductsToPurchase();
+    public void showProductsToPurchase(boolean status) throws SQLException {
+        search_prod_purchase.textProperty().addListener((observable, oldValue, newValue) -> filterProductsToPurchase(newValue));
+        ObservableList<Product> purchaseList = productDAO.getProductsListPurchase();
 
         if (status) {
             purchase_table.setEditable(true);
@@ -1478,31 +1338,12 @@ public class DashboardController implements Initializable {
 
     private void deletePurchaseItem(int pId) {
         int purchaseId = getPurchaseId();
-        connection = Database.getInstance().connectDB();
-        String sql = "DELETE FROM details_purchases WHERE product_id=? and purchase_id=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, pId);
-            preparedStatement.setInt(2, purchaseId);
-            preparedStatement.executeUpdate();
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
+        purchaseDAO.deletePurchaseItem(pId, purchaseId);
     }
 
     private void updatePurchaseItem(int pId, int qty) {
         int purchaseId = getPurchaseId();
-        connection = Database.getInstance().connectDB();
-        String sql = "UPDATE details_purchases SET quantity=? WHERE product_id=? and purchase_id=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, qty);
-            preparedStatement.setInt(2, pId);
-            preparedStatement.setInt(3, purchaseId);
-            preparedStatement.executeUpdate();
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
+        purchaseDAO.updatePurchaseItem(qty, pId, purchaseId);
         getTotalPurchaseAmount();
     }
 
@@ -1586,7 +1427,7 @@ public class DashboardController implements Initializable {
         }
     }
 
-    public void newPurchase() {
+    public void newPurchase() throws SQLException {
 
         if (!purchaseCreated) {
             showProductsToPurchase(true);
@@ -1880,7 +1721,7 @@ public class DashboardController implements Initializable {
 
 //      CUSTOMER PANE
         checkUserRole();
-        showCustomerData();
+        showUsersData();
 //       PRODUCTS PANE
         try {
             showProductsData();
@@ -1889,6 +1730,10 @@ public class DashboardController implements Initializable {
         }
 
 //      INVOICE PANE
-        showInvoiceData();
+        try {
+            showInvoiceData();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

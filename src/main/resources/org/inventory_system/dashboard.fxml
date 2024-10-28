@@ -45,7 +45,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="CLIPBOARD" size="1.2em" />
                      </graphic>
                   </Button>
-                  <Button fx:id="customer_btn" layoutX="39.0" layoutY="525.0" mnemonicParsing="false" onAction="#activateDashboard" onMouseClicked="#activateAnchorPane" prefWidth="200.0" styleClass="navbutton" stylesheets="@dashboard.css" text="USUARIOS" textFill="WHITE">
+                  <Button fx:id="user_btn" layoutX="39.0" layoutY="525.0" mnemonicParsing="false" onAction="#activateDashboard" onMouseClicked="#activateAnchorPane" prefWidth="200.0" styleClass="navbutton" stylesheets="@dashboard.css" text="USUARIOS" textFill="WHITE">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -103,7 +103,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="dasboard_pane" layoutX="-1.0" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" visible="false">
+                  <AnchorPane fx:id="dashboard_pane" layoutX="-1.0" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" visible="false">
                      <children>
                         <Pane layoutX="44.0" layoutY="47.0" prefHeight="200.0" prefWidth="227.0" styleClass="dasboard_box" stylesheets="@dashboard.css">
                            <children>
@@ -215,7 +215,7 @@
                               <Font name="Dubai Bold" size="15.0" />
                            </font>
                         </Label>
-                        <Button fx:id="bill_save" alignment="CENTER" layoutX="316.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#billSave" prefHeight="50.0" prefWidth="150.0" styleClass="save" stylesheets="@dashboard.css" text="GUARDAR">
+                        <Button fx:id="bill_save" alignment="CENTER" layoutX="316.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#saleSave" prefHeight="50.0" prefWidth="150.0" styleClass="save" stylesheets="@dashboard.css" text="GUARDAR">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="SAVE" size="24.0" text="" />
                            </graphic>
@@ -276,17 +276,17 @@
                            </font>
                         </Button>
                      </children></AnchorPane>
-                  <AnchorPane fx:id="customer_pane" layoutX="-1.0" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" visible="false">
+                  <AnchorPane fx:id="user_pane" layoutX="-1.0" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" visible="false">
                      <children>
-                        <TableView fx:id="customer_table" layoutX="13.0" layoutY="110.0" prefHeight="330.0" prefWidth="794.0" stylesheets="@dashboard.css">
+                        <TableView fx:id="user_table" layoutX="13.0" layoutY="110.0" prefHeight="330.0" prefWidth="794.0" stylesheets="@dashboard.css">
                            <columns>
-                              <TableColumn fx:id="cust_col_username" prefWidth="198.5" text="Usuario" />
-                              <TableColumn fx:id="cust_col_phone" prefWidth="198.5" text="Telefono" />
-                              <TableColumn fx:id="cust_col_email" prefWidth="198.5" text="Email" />
-                              <TableColumn fx:id="cust_col_rol" prefWidth="198.5" text="Rol" />
+                              <TableColumn fx:id="usr_col_username" prefWidth="198.5" text="Usuario" />
+                              <TableColumn fx:id="usr_col_phone" prefWidth="198.5" text="Telefono" />
+                              <TableColumn fx:id="usr_col_email" prefWidth="198.5" text="Email" />
+                              <TableColumn fx:id="usr_col_rol" prefWidth="198.5" text="Rol" />
                            </columns>
                         </TableView>
-                        <Button fx:id="cust_btn_delete" layoutX="316.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#deleteCustomerData" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="ELIMINAR">
+                        <Button fx:id="usr_btn_delete" layoutX="316.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#deleteUser" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="ELIMINAR">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="24.0" />
                            </graphic>
@@ -294,7 +294,7 @@
                               <Font name="Dubai Bold" size="18.0" />
                            </font>
                         </Button>
-                        <Button fx:id="cust_btn_edit" layoutX="480.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#updateUserData" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="EDITAR">
+                        <Button fx:id="usr_btn_edit" layoutX="480.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#updateUserData" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="EDITAR">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="EDIT" size="24.0" />
                            </graphic>
@@ -302,7 +302,7 @@
                               <Font name="Dubai Bold" size="18.0" />
                            </font>
                         </Button>
-                        <Button fx:id="cust_btn_add" layoutX="644.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#setNewUser" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="NUEVO">
+                        <Button fx:id="usr_btn_add" layoutX="644.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#setNewUser" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="NUEVO">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="PLUS_CIRCLE" size="24.0" />
                            </graphic>

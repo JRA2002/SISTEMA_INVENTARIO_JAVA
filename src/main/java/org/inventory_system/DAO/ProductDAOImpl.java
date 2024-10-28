@@ -155,5 +155,33 @@ public class ProductDAOImpl extends Database implements ProductDAO {
             this.closeDB();
         }
     }
+
+    @Override
+    public ObservableList<Product> getProductsListPurchase() throws SQLException {
+        ObservableList<Product> productsListPurchase = FXCollections.observableArrayList();
+        int qty = 0;
+        String sql = "SELECT p.id,p.name,sp.supp_name,p.purch_price,p.unit\n" +
+                "FROM products AS p\n" +
+                "INNER JOIN supplier AS sp ON p.supp_id=sp.id";
+        try {
+            this.connectDB();
+            PreparedStatement statement = this.connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery(sql);
+            Product productPurchase;
+            while (resultSet.next()) {
+                productPurchase = new Product(
+                        Integer.parseInt(resultSet.getString("id")),
+                        resultSet.getString("name"),
+                        resultSet.getString("supp_name"),
+                        Double.parseDouble(resultSet.getString("purch_price")),
+                        resultSet.getString("unit"),
+                        qty);
+                productsListPurchase.addAll(productPurchase);
+            }
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
+        return productsListPurchase;
+    }
 }
 
