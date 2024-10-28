@@ -10,4 +10,9 @@ public interface PurchaseDAO {
     void deletePurchaseItem(int prodId, int purchaseId);
     void updatePurchaseItem(int qty, int prodId, int purchaseId);
     void insertPurchaseItem(int purchaseId, int prodId, int qty);
+    int getPurchaseId();
+    void cancelPurchase(int purchaseId);
+    void createPurchase(int userId,String datePurchase);
+    String getPurchaseAmount(int purchaseId);
+    double getTotalPurchase();
 }

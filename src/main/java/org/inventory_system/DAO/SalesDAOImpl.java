@@ -5,12 +5,14 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import org.inventory_system.interfaces.SalesDAO;
 import org.inventory_system.model.SalesDetails;
-
+import org.inventory_system.config.ErrorMesajes;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SalesDAOImpl extends Database implements SalesDAO {
+    ErrorMesajes error = new ErrorMesajes();
+
     @Override
     public void insertNewSale(String dateSale, int userId) throws SQLException {
         try{
@@ -23,12 +25,7 @@ public class SalesDAOImpl extends Database implements SalesDAO {
             preparedStatement.setInt(2, userId);
             preparedStatement.executeUpdate();
         } catch (Exception err) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeight(500);
-            alert.setTitle("Error Message");
-            alert.setHeaderText(null);
-            alert.setContentText(err.getMessage());
-            alert.showAndWait();
+            error.getMessage(err);
         }finally {
             this.closeDB();
         }
@@ -47,12 +44,7 @@ public class SalesDAOImpl extends Database implements SalesDAO {
             preparedStatement.setInt(3, productId);
             preparedStatement.executeUpdate();
         } catch (Exception err) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeight(500);
-            alert.setTitle("Error Message");
-            alert.setHeaderText(null);
-            alert.setContentText(err.getMessage());
-            alert.showAndWait();
+            error.getMessage(err);
         }finally {
             this.closeDB();
         }
@@ -82,7 +74,7 @@ public class SalesDAOImpl extends Database implements SalesDAO {
                 salesList.addAll(salesData);
             }
         } catch (Exception err) {
-            err.printStackTrace();
+            error.getMessage(err);
         }
         return salesList;
     }
@@ -118,12 +110,7 @@ public class SalesDAOImpl extends Database implements SalesDAO {
             preparedStatement.setInt(1, saleId);
             preparedStatement.executeUpdate();
         } catch (Exception err) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeight(500);
-            alert.setTitle("Error Message");
-            alert.setHeaderText(null);
-            alert.setContentText(err.getMessage());
-            alert.showAndWait();
+            error.getMessage(err);
         }
     }
 
@@ -137,12 +124,46 @@ public class SalesDAOImpl extends Database implements SalesDAO {
             preparedStatement.setInt(2, saleId);
             preparedStatement.executeUpdate();
         } catch (Exception err) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeight(500);
-            alert.setTitle("Error Message");
-            alert.setHeaderText(null);
-            alert.setContentText(err.getMessage());
-            alert.showAndWait();
+            error.getMessage(err);
         }
+    }
+
+    @Override
+    public double getTotalSales() {
+        double total = 0;
+        String sql = "SELECT COUNT(sales_id) AS total_sale FROM sales";
+        try {
+            this.connectDB();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                total = resultSet.getDouble("total_sale");
+            }
+        } catch (Exception err) {
+            error.getMessage(err);
+        }
+    return total;
+    }
+
+    @Override
+    public double getSalesActualMonth(String month) {
+        double totalMonth = 0;
+        String sql = "SELECT SUM(ds.quantity * p.price) AS total_sales_this_month\n" +
+                "FROM sales AS s\n" +
+                "INNER JOIN details_sales AS ds ON s.sales_id = ds.sales_id\n" +
+                "INNER JOIN products AS p ON ds.product_id = p.id\n" +
+                "WHERE DATE_FORMAT(s.date, '%M') = ?";
+        try {
+            this.connectDB();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, month);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                totalMonth = resultSet.getDouble("total_sales_this_month");
+            }
+        } catch (Exception err) {
+            error.getMessage(err);
+        }
+        return totalMonth;
     }
 }

@@ -1323,7 +1323,11 @@ public class DashboardController implements Initializable {
                 } else if (qty == 0 && productIdList.contains(pId)) {
                     deletePurchaseItem(pId);
                     if (productIdList.isEmpty()) {
-                        cancelPurchase();
+                        try {
+                            cancelPurchase();
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 } else {
                     updatePurchaseItem(pId, qty);
@@ -1337,93 +1341,31 @@ public class DashboardController implements Initializable {
     }
 
     private void deletePurchaseItem(int pId) {
-        int purchaseId = getPurchaseId();
+        int purchaseId = purchaseDAO.getPurchaseId();
         purchaseDAO.deletePurchaseItem(pId, purchaseId);
     }
 
     private void updatePurchaseItem(int pId, int qty) {
-        int purchaseId = getPurchaseId();
+        int purchaseId = purchaseDAO.getPurchaseId();
         purchaseDAO.updatePurchaseItem(qty, pId, purchaseId);
         getTotalPurchaseAmount();
     }
 
     public void insertPurchaseItem(int pId, int qty) {
 
-        System.out.println("nuevo purchase " + pId + " " + "cantidad " + qty);
-        int purchaseId = getPurchaseId();
-        connection = Database.getInstance().connectDB();
-        String sql = "INSERT INTO details_purchases(purchase_id,quantity,product_id) VALUES(?,?,?)";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, purchaseId);
-            preparedStatement.setInt(2, qty);
-            preparedStatement.setInt(3, pId);
-
-            int result = preparedStatement.executeUpdate();
-            if (result > 0) {
-                purchaseCreated = true;
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText("No se pudo crear la compra");
-                alert.showAndWait();
-            }
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
+        int purchaseId = purchaseDAO.getPurchaseId();
+        purchaseDAO.insertPurchaseItem(purchaseId, pId, qty);
+        purchaseCreated = true;
         getTotalPurchaseAmount();
     }
 
-    private int getPurchaseId() {
-        int purchaseId = 0;
-        if (purchaseCreated) {
-            connection = Database.getInstance().connectDB();
-            String sql = "SELECT MAX(purchase_id) AS purchase_id FROM purchases";
-            try {
-                statement = connection.createStatement();
-                resultSet = statement.executeQuery(sql);
-
-                while (resultSet.next()) {
-                    purchaseId = resultSet.getInt("purchase_id");
-                }
-
-            } catch (Exception err) {
-                err.printStackTrace();
-            }
-        }
-        return purchaseId;
-    }
-
-    public void cancelPurchase() {
+    public void cancelPurchase() throws SQLException {
+        int purchaseId = purchaseDAO.getPurchaseId();
         if (purchaseCreated) {
 
-            connection = Database.getInstance().connectDB();
-            String sql = "DELETE FROM purchases WHERE purchase_id=?";
-            try {
-                int purchaseId = getPurchaseId();
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setInt(1, purchaseId);
-
-                int result = preparedStatement.executeUpdate();
-                if (result > 0) {
-                    purchaseCreated = false;
-                    showProductsToPurchase(false);
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("No hay datos en la Tabla.");
-                    alert.showAndWait();
-                }
-            } catch (Exception err) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeight(500);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText(err.getMessage());
-                alert.showAndWait();
-            }
+            purchaseDAO.cancelPurchase(purchaseId);
+            purchaseCreated = false;
+            showProductsToPurchase(false);
         }
     }
 
@@ -1444,68 +1386,28 @@ public class DashboardController implements Initializable {
     }
 
     public void createNewPurchase() {
+        User loggedInUser = Session.getCurrentUser();
+        int userId = loggedInUser.getId();
+        LocalDate date = LocalDate.now();
+        String datePurchase = String.valueOf(Date.valueOf(date));
+
         if (!purchaseCreated) {
-            connection = Database.getInstance().connectDB();
-            String sql = "INSERT INTO purchases(date,user_id)VALUES(?,?)";
-
-            try {
-                User loggedInUser = Session.getCurrentUser();
-                int userId = loggedInUser.getId();
-                LocalDate date = LocalDate.now();
-                Date datePurchase = Date.valueOf(date);
-
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setDate(1, datePurchase);
-                preparedStatement.setInt(2, userId);
-
-                int result = preparedStatement.executeUpdate();
-                if (result > 0) {
-                    purchaseCreated = true;
-                    System.out.println("heeeree");
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Nose pudo crear la compra");
-                    alert.showAndWait();
-                }
-            } catch (Exception err) {
-                err.printStackTrace();
-            }
+            purchaseDAO.createPurchase(userId, datePurchase);
+            purchaseCreated = true;
         }
     }
 
     private void getTotalPurchaseAmount() {
-        int purchID = getPurchaseId();
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT SUM(dp.quantity * p.purch_price) AS total_amount\n" +
-                "FROM details_purchases AS dp\n" +
-                "INNER JOIN products AS p ON p.id = dp.product_id\n" +
-                "WHERE dp.purchase_id = ?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, purchID);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                String result = resultSet.getString("total_amount");
-                System.out.println("aquiii " + result);
-                if (result == null) {
-                    purchase_total_amount.setText("0.00");
-                } else {
-                    purchase_total_amount.setText("S/. "+result);
-                }
-            }
-        } catch (Exception err) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeight(500);
-            alert.setTitle("Error Message");
-            alert.setHeaderText(null);
-            alert.setContentText(err.getMessage());
-            alert.showAndWait();
+        int purchaseID = purchaseDAO.getPurchaseId();
+        String result = purchaseDAO.getPurchaseAmount(purchaseID);
+        if (Objects.equals(result, "")) {
+            purchase_total_amount.setText("0.00");
+        } else {
+            purchase_total_amount.setText("S/. "+result);
         }
     }
 
-    public void savePurchase() {
+    public void savePurchase() throws SQLException {
         if (productIdList.isEmpty()) {
             cancelPurchase();
         }
@@ -1527,27 +1429,8 @@ public class DashboardController implements Initializable {
     }
 
     public void getTotalPurchase() {
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT COUNT(purchase_id) as total_purchase FROM purchases";
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                String result = resultSet.getString("total_purchase");
-                if (result == null) {
-                    dash_total_purchase.setText("S/. 0.00");
-                } else {
-                    dash_total_purchase.setText(result);
-                }
-            }
-        } catch (Exception err) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeight(500);
-            alert.setTitle("Error Message");
-            alert.setHeaderText(null);
-            alert.setContentText(err.getMessage());
-            alert.showAndWait();
-        }
+        String result  = String.valueOf(purchaseDAO.getTotalPurchase());
+        dash_total_purchase.setText(result);
     }
 
     public void getTotalStocks() {
@@ -1559,31 +1442,11 @@ public class DashboardController implements Initializable {
     }
 
     private void getTotalSales() {
-
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT COUNT(sales_id) AS total_sale FROM sales";
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                String result = resultSet.getString("total_sale");
-                if (result == null) {
-                    dash_total_sold.setText("0");
-                } else {
-                    dash_total_sold.setText(result);
-                }
-            }
-        } catch (Exception err) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeight(500);
-            alert.setTitle("Error Message");
-            alert.setHeaderText(null);
-            alert.setContentText(err.getMessage());
-            alert.showAndWait();
-        }
+        String totalSales = String.valueOf(salesDAO.getTotalSales());
+        dash_total_sold.setText(totalSales);
     }
 
-    private String setMonth(String month) {
+    private String getSpanishMonth(String month) {
         HashMap<String, String> months = new HashMap<>();
 
         months.put("JANUARY", "ENERO");
@@ -1605,74 +1468,17 @@ public class DashboardController implements Initializable {
     public void getSalesDetailsOfThisMonth() {
         LocalDate date = LocalDate.now();
         String monthEnglish = date.getMonth().toString();
-        String monthName = setMonth(monthEnglish);
-
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT SUM(ds.quantity * p.price) AS total_sales_this_month\n" +
-                "FROM sales AS s\n" +
-                "INNER JOIN details_sales AS ds ON s.sales_id = ds.sales_id\n" +
-                "INNER JOIN products AS p ON ds.product_id = p.id\n" +
-                "WHERE DATE_FORMAT(s.date, '%M') = ?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, monthEnglish);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                String result = resultSet.getString("total_sales_this_month");
-                if (result == null) {
-                    dash_total_sales_this_month.setText("0.00");
-                } else {
-                    dash_total_sales_this_month.setText(result);
-                }
-                dash_total_sales_this_month_name.setText(monthName);
-            }
-        } catch (Exception err) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeight(500);
-            alert.setTitle("Error Message");
-            alert.setHeaderText(null);
-            alert.setContentText(err.getMessage());
-            alert.showAndWait();
-        }
+        String monthSpanish = getSpanishMonth(monthEnglish);
+        String total = String.valueOf(salesDAO.getSalesActualMonth(monthEnglish));
+        dash_total_items_sold_this_month.setText(total);
+        dash_total_sales_this_month_name.setText(monthSpanish);
     }
 
-    public void getItemSoldThisMonth() {
-        LocalDate date = LocalDate.now();
-        String monthEnglish = date.getMonth().toString();
-        String monthName = setMonth(monthEnglish);
-
-        connection = Database.getInstance().connectDB();
-        String sql = "SELECT COUNT(sales_id) AS total FROM sales WHERE DATE_FORMAT(date, '%M')=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, monthEnglish);
-            resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                String result = resultSet.getString("total");
-                if (result == null) {
-                    dash_total_items_sold_this_month.setText("0");
-                } else {
-                    dash_total_items_sold_this_month.setText(result);
-                }
-
-                dash_total_sales_items_this_month_name.setText(monthName);
-            }
-        } catch (Exception err) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeight(500);
-            alert.setTitle("Error Message");
-            alert.setHeaderText(null);
-            alert.setContentText(err.getMessage());
-            alert.showAndWait();
-        }
-    }
     private void showDashboardData(){
             getTotalPurchase();
             getTotalSales();
             getTotalStocks();
             getSalesDetailsOfThisMonth();
-            getItemSoldThisMonth();
     }
 
     public void signOut() {
