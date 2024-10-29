@@ -2,7 +2,6 @@ package org.inventory_system.DAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 import org.inventory_system.interfaces.SalesDAO;
 import org.inventory_system.model.SalesDetails;
 import org.inventory_system.config.ErrorMesajes;
@@ -165,5 +164,22 @@ public class SalesDAOImpl extends Database implements SalesDAO {
             error.getMessage(err);
         }
         return totalMonth;
+    }
+
+    @Override
+    public int getSalesId() {
+        int salesId = 0;
+        String sql = "SELECT MAX(sales_id) AS sales_id FROM sales";
+        try {
+            this.connectDB();
+            PreparedStatement  statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                salesId = resultSet.getInt("sales_id");
+            }
+        } catch (Exception err) {
+            error.getMessage(err);
+        }
+    return salesId;
     }
 }

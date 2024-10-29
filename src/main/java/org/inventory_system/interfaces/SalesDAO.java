@@ -14,4 +14,5 @@ public interface SalesDAO {
     void deleteSalesDetails(int prodId, int saleId);
     double getTotalSales();
     double getSalesActualMonth(String month);
+    int getSalesId();
 }

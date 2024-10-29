@@ -116,9 +116,6 @@ public class DashboardController implements Initializable {
     private TextField bill_item;
 
     @FXML
-    private TextField bill_name;
-
-    @FXML
     private TextField bill_phone;
 
     @FXML
@@ -700,7 +697,6 @@ public class DashboardController implements Initializable {
         }else{
             newQty = actualQty - qtyUpdate;
         }
-
         return newQty;
     }
 
@@ -852,21 +848,8 @@ public class DashboardController implements Initializable {
     public int getSalesId() {
         int salesId = 0;
         if (saleCreated) {
-            connection = Database.getInstance().connectDB();
-            String sql = "SELECT MAX(sales_id) AS sales_id FROM sales";
-            try {
-                statement = connection.createStatement();
-                resultSet = statement.executeQuery(sql);
-
-                while (resultSet.next()) {
-                    salesId = resultSet.getInt("sales_id");
-                }
-
-            } catch (Exception err) {
-                err.printStackTrace();
-            }
+            salesId = salesDAO.getSalesId();
         }
-
         return salesId;
     }
 
@@ -1524,11 +1507,10 @@ public class DashboardController implements Initializable {
         }
         search_prod_purchase.setEditable(false);
 
-
 //      CUSTOMER PANE
         checkUserRole();
         showUsersData();
-//       PRODUCTS PANE
+//      PRODUCTS PANE
         try {
             showProductsData();
         } catch (Exception e) {
