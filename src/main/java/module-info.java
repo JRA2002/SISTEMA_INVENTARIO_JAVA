@@ -15,6 +15,7 @@ module org.inventory_system {
     requires de.jensd.fx.glyphs.fontawesome;
     requires net.bytebuddy;
     requires password4j;
+    requires org.apache.poi.ooxml;
 
     opens org.inventory_system to javafx.fxml;
     exports org.inventory_system;
