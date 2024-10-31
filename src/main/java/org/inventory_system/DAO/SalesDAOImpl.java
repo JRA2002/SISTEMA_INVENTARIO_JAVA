@@ -128,15 +128,15 @@ public class SalesDAOImpl extends Database implements SalesDAO {
     }
 
     @Override
-    public double getTotalSales() {
-        double total = 0;
-        String sql = "SELECT COUNT(sales_id) AS total_sale FROM sales";
+    public int getTotalSales() {
+        int total = 0;
+        String sql = "SELECT COUNT(sales_id) AS total_sales FROM sales";
         try {
             this.connectDB();
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                total = resultSet.getDouble("total_sale");
+                total = resultSet.getInt("total_sales");
             }
         } catch (Exception err) {
             error.getMessage(err);

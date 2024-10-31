@@ -97,12 +97,6 @@ public class DashboardController implements Initializable {
 
     private Connection connection;
 
-    private Statement statement;
-
-    private PreparedStatement preparedStatement;
-
-    private ResultSet resultSet;
-
     @FXML
     private Button bill_add;
 
@@ -1416,13 +1410,6 @@ public class DashboardController implements Initializable {
         dash_total_purchase.setText(result);
     }
 
-    public void getTotalStocks() {
-
-        int totalPurchase = Integer.parseInt(dash_total_purchase.getText());
-        int total_sold = Integer.parseInt(dash_total_sold.getText());
-        int totalStockLeft = totalPurchase - total_sold;
-        dash_total_stocks.setText(String.valueOf(totalStockLeft));
-    }
 
     private void getTotalSales() {
         String totalSales = String.valueOf(salesDAO.getTotalSales());
@@ -1460,14 +1447,14 @@ public class DashboardController implements Initializable {
     private void showDashboardData(){
             getTotalPurchase();
             getTotalSales();
-            getTotalStocks();
+            //getTotalStocks();
             getSalesDetailsOfThisMonth();
     }
 
     public void signOut() {
         signout_btn.getScene().getWindow().hide();
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("login-view.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("login-view.fxml")));
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             root.setOnMousePressed((event) -> {

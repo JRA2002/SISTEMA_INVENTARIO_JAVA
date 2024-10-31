@@ -12,7 +12,7 @@ public interface SalesDAO {
     int calculateFinalAmount(int salId) throws SQLException;
     void deleteSale(int saleId);
     void deleteSalesDetails(int prodId, int saleId);
-    double getTotalSales();
+    int getTotalSales();
     double getSalesActualMonth(String month);
     int getSalesId();
 }

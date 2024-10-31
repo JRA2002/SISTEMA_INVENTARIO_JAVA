@@ -2,7 +2,7 @@ package org.inventory_system.model;
 
 public class Category {
     private final int id;
-    private String name;
+    private final String name;
 
     public Category(int id, String name) {
         this.id = id;

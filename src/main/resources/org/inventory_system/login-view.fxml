@@ -35,21 +35,18 @@
                               <Font size="20.0" />
                            </font>
                         </Button>
-                        <FontAwesomeIconView glyphName="USERS" layoutX="372.0" layoutY="234.0" selectionFill="#2f466b" size="98" text="" wrappingWidth="112.22855949401855" />
                         <Button alignment="CENTER" contentDisplay="RIGHT" layoutX="741.0" layoutY="14.0" mnemonicParsing="false" onAction="#onExit" onMouseClicked="#onExit" onMouseDragged="#onExit" prefHeight="29.0" prefWidth="50.0" styleClass="close" stylesheets="@login.css">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="16.0" />
                            </graphic>
                         </Button>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane prefHeight="694.0" prefWidth="275.0" styleClass="login-bg" stylesheets="@login.css">
-                     <children>
-                        <ImageView fx:id="loginImage" fitHeight="158.0" fitWidth="206.0" layoutX="35.0" layoutY="24.0">
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="110.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="loginImage" fitHeight="158.0" fitWidth="206.0" layoutX="327.0" layoutY="89.0">
                               <Image url="@images/bellas.png" />
                         </ImageView>
                      </children>
                   </AnchorPane>
+                  <AnchorPane prefHeight="694.0" prefWidth="275.0" styleClass="login-bg" stylesheets="@login.css" />
                </children>
             </AnchorPane>
          </children>
