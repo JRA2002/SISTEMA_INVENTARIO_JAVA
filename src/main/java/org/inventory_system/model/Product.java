@@ -13,7 +13,8 @@ public class Product {
     private String loc_name;
     private String  suppName;
     private double pricePur;
-    private int qty;
+    private int qty = 0;
+    private int diff;
 
     public Product(int id, String name, String unit, int quantity, double price, String cat_name, LocalDate exp_date, String loc_name) {
         this.id = id;
@@ -37,7 +38,16 @@ public class Product {
         this.suppName = suppName;
         this.pricePur = pricePur;
         this.unit = unit;
-        this.qty = 0;
+        this.qty = qty;
+    }
+    public Product(int id, String name, double price, String unit, int quantity, int qty, int diff){
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.unit = unit;
+        this.quantity = quantity;
+        this.qty = qty;
+        this.diff = qty - quantity;
     }
 
     public int getId() {
@@ -116,6 +126,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{name='" + name + "', quantity=" + qty + "}";
+        return "Product{name='" + name + "', quantity=" + qty + ' ' + diff +"}";
     }
 }

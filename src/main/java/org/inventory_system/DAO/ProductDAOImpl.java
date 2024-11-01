@@ -21,15 +21,15 @@ public class ProductDAOImpl extends Database implements ProductDAO {
     @Override
     public ObservableList<Product> getProductsList() throws SQLException {
         ObservableList<Product> productsList = FXCollections.observableArrayList();
-        this.connectDB();
 
         String sql = "SELECT pd.id,pd.name,pd.unit, pd.quantity,pd.price,ct.cat_name,pd.exp_date,ln.loc_name FROM products AS pd \n" +
                 "JOIN category AS ct \n" +
                 "JOIN location AS ln \n" +
                 "WHERE pd.cat_id=ct.id and pd.loc_id=ln.loc_id";
 
-        PreparedStatement statement = this.connection.prepareStatement(sql);
         try {
+            this.connectDB();
+            PreparedStatement statement = this.connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery(sql);
             Product product;
             while (resultSet.next()) {

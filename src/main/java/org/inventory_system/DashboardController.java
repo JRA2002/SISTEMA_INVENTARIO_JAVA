@@ -165,6 +165,7 @@ public class DashboardController implements Initializable {
     private boolean saleCreated = false;
     private boolean purchaseCreated = false;
     private boolean saleDeleted = false;
+    private boolean inventoryCreated = false;
 
     @FXML
     private Button usr_btn_delete;
@@ -321,6 +322,7 @@ public class DashboardController implements Initializable {
     SupplierDAO comboSupplier = new SupplierDAOImpl();
     SalesDAO salesDAO = new SalesDAOImpl();
     UserDAO userDAO = new UserDAOImpl();
+    InventoryDAO inventoryDAO = new InventoryDAOImpl();
     PurchaseDAO purchaseDAO = new PurchaseDAOImpl();
     ObservableList<Product> productsList = productDAO.getProductsList();
 
@@ -1253,6 +1255,27 @@ public class DashboardController implements Initializable {
         invoice_table.setItems(purchaseList);
     }
 
+    //========================NEW INVENTORY METHODS============================
+    public void newInventory() throws SQLException {
+        System.out.println("new inventory hereeee");
+        /*if (!inventoryCreated) {
+            inventoryDAO.createInventory(userId, datePurchase);
+            inventoryCreated = true;
+        }*/
+        ObservableList<Product> lista = inventoryDAO.getProductsList();
+        System.out.println(lista);
+    }
+
+    public void cancelInventory(){
+
+    }
+
+    public void saveInventory(){
+
+    }
+
+    //========================PURCHASE METHODS============================
+
     public void filterProductsToPurchase(String searchText) {
         ObservableList<Product> filteredList = FXCollections.observableArrayList();
 
@@ -1268,7 +1291,6 @@ public class DashboardController implements Initializable {
         }
     }
 
-    //========================PURCHASE METHODS============================
     public void showProductsToPurchase(boolean status) throws SQLException {
         search_prod_purchase.textProperty().addListener((observable, oldValue, newValue) -> filterProductsToPurchase(newValue));
         ObservableList<Product> purchaseList = productDAO.getProductsListPurchase();
@@ -1343,6 +1365,7 @@ public class DashboardController implements Initializable {
             purchaseDAO.cancelPurchase(purchaseId);
             purchaseCreated = false;
             showProductsToPurchase(false);
+            search_prod_purchase.setEditable(false);
         }
     }
 
@@ -1443,6 +1466,7 @@ public class DashboardController implements Initializable {
         dash_total_items_sold_this_month.setText(total);
         dash_total_sales_this_month_name.setText(monthSpanish);
     }
+
 
     private void showDashboardData(){
             getTotalPurchase();

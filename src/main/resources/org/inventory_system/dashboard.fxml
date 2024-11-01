@@ -366,7 +366,53 @@
                         </Button>
                      </children></AnchorPane>
                   <AnchorPane fx:id="new_inventory_pane" layoutX="-1.0" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" visible="false">
-
+                     <children>
+                        <TableView fx:id="new_inventory_table" layoutX="13.0" layoutY="68.0" prefHeight="400.0" prefWidth="794.0" stylesheets="@dashboard.css">
+                           <columns>
+                              <TableColumn fx:id="inventory_col_prod" prefWidth="142.3" text="PRODUCTO" />
+                              <TableColumn fx:id="inventory_col_price" prefWidth="112.3" text="PRECIO" />
+                              <TableColumn fx:id="inventory_col_unit" prefWidth="132.3" text="UNIDAD" />
+                              <TableColumn fx:id="inventory_col_qty" minWidth="0.0" prefWidth="132.3" text="CANTIDAD" />
+                              <TableColumn fx:id="inventory_col_real_qty" minWidth="0.0" prefWidth="132.3" text="CANTIDAD REAL" />
+                              <TableColumn fx:id="inventory_col_diff" minWidth="0.0" prefWidth="142.3" text="DIFERENCIA" />
+                           </columns>
+                        </TableView>
+                        <Button fx:id="inventory_btn_cancel" layoutX="316.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#cancelInventory" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="CANCEL">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="24.0" />
+                           </graphic>
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="inventory_btn_new" layoutX="480.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#newInventory" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="NUEVO">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="PLUS_CIRCLE" size="24.0" />
+                           </graphic>
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="inventory_btn_save" layoutX="644.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#saveInventory" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="PROCESAR">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="SAVE" size="24.0" />
+                           </graphic>
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Button>
+                        <Label layoutX="13.0" layoutY="14.0" prefHeight="47.0" prefWidth="170.0" text="DIFERENCIA TOTAL :">
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="inventory_total_diff" layoutX="180.0" layoutY="14.0" prefHeight="47.0" prefWidth="150.0" text="S/. ">
+                           <font>
+                              <Font name="Dubai Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="search_prod_inventory" layoutX="594.0" layoutY="14.0" prefHeight="40.0" prefWidth="206.0" promptText="Buscar Producto..." styleClass="textfield" stylesheets="@dashboard.css" />
+                     </children>
                   </AnchorPane>
                   <AnchorPane fx:id="invoice_pane" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" visible="false">
                      <children>
@@ -395,6 +441,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
+
                   <AnchorPane fx:id="purchase_pane" layoutX="-1.0" layoutY="55.0" prefHeight="639.0" prefWidth="820.0" visible="false">
                      <children>
                         <TableView fx:id="purchase_table" layoutX="13.0" layoutY="68.0" prefHeight="400.0" prefWidth="794.0" stylesheets="@dashboard.css">
@@ -404,7 +451,6 @@
                               <TableColumn fx:id="purchase_col_price" prefWidth="138.5" text="PRECIO" />
                               <TableColumn fx:id="purchase_col_unit" prefWidth="80.0" text="UNIDAD" />
                               <TableColumn fx:id="purchase_col_qty" minWidth="0.0" prefWidth="158.5" text="CANTIDAD" />
-
                            </columns>
                         </TableView>
                         <Button fx:id="purchase_btn_cancel" layoutX="316.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#cancelPurchase" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="CANCEL">
@@ -442,7 +488,8 @@
                            </font>
                         </Label>
                         <TextField fx:id="search_prod_purchase" layoutX="594.0" layoutY="14.0" prefHeight="40.0" prefWidth="206.0" promptText="Buscar Producto..." styleClass="textfield" stylesheets="@dashboard.css" />
-                     </children></AnchorPane>
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
          </children>

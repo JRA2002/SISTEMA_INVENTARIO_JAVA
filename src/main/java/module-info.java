@@ -1,7 +1,7 @@
 module org.inventory_system {
     requires javafx.fxml;
     requires javafx.web;
-    //requires javafx.media;
+    requires javafx.media;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
