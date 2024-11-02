@@ -22,7 +22,8 @@ public class InventoryDAOImpl extends Database implements InventoryDAO {
     @Override
     public ObservableList<Product> getProductsList() throws SQLException {
         ObservableList<Product> productList = FXCollections.observableArrayList();
-        int qty = 0;
+        int realQty = 0;
+        int diff = 0;
         String sql = "SELECT id, name, price, unit, quantity FROM products";
         try {
             this.connectDB();
@@ -37,8 +38,8 @@ public class InventoryDAOImpl extends Database implements InventoryDAO {
                         Double.parseDouble(resultSet.getString("price")),
                         resultSet.getString("unit"),
                         Integer.parseInt(resultSet.getString("quantity")),
-                        resultSet.getInt(qty),
-                        resultSet.getInt("diff"));
+                        realQty,
+                        diff );
                 productList.add(product);
             }
         } catch (Exception err) {

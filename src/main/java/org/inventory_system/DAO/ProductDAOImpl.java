@@ -43,7 +43,6 @@ public class ProductDAOImpl extends Database implements ProductDAO {
                         resultSet.getDate("exp_date").toLocalDate(),
                         resultSet.getString("loc_name")
                 );
-                System.out.println("implementacion" + product);
                 productsList.add(product);
             }
         }catch (Exception err) {

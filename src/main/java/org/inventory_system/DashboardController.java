@@ -134,6 +134,27 @@ public class DashboardController implements Initializable {
     private TableView<SalesDetails> billing_table;
 
     @FXML
+    private TableView<Product> new_inventory_table;
+
+    @FXML
+    private TableColumn<?, ?> inventory_col_prod;
+
+    @FXML
+    private TableColumn<?, ?> inventory_col_price;
+
+    @FXML
+    private TableColumn<?, ?> inventory_col_unit;
+
+    @FXML
+    private TableColumn<?, ?> inventory_col_qty;
+
+    @FXML
+    private TableColumn<Product, Integer> inventory_col_real_qty;
+
+    @FXML
+    private TableColumn<?, ?> inventory_col_diff;
+
+    @FXML
     private TextField billing_table_search;
 
     @FXML
@@ -1263,7 +1284,24 @@ public class DashboardController implements Initializable {
             inventoryCreated = true;
         }*/
         ObservableList<Product> lista = inventoryDAO.getProductsList();
-        System.out.println(lista);
+        for (Product prod : lista) {
+            int diff = prod.getQuantity();
+            prod.setDiff(-diff);
+            System.out.println(prod);
+        }
+
+        new_inventory_table.setEditable(true);
+        inventory_col_prod.setCellValueFactory(new PropertyValueFactory<>("name"));
+        inventory_col_price.setCellValueFactory(new PropertyValueFactory<>("price"));
+        inventory_col_unit.setCellValueFactory(new PropertyValueFactory<>("unit"));
+        inventory_col_qty.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        inventory_col_real_qty.setCellValueFactory(new PropertyValueFactory<>("qty"));
+        inventory_col_diff.setCellValueFactory(new PropertyValueFactory<>("diff"));
+        inventory_col_real_qty.setCellFactory(TextFieldTableCell.<Product, Integer>forTableColumn(new IntegerStringConverter()));
+        inventory_col_real_qty.setOnEditCommit(event -> {
+            
+        });
+        new_inventory_table.setItems(lista);
     }
 
     public void cancelInventory(){

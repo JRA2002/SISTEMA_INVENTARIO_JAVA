@@ -47,7 +47,7 @@ public class Product {
         this.unit = unit;
         this.quantity = quantity;
         this.qty = qty;
-        this.diff = qty - quantity;
+        this.diff = diff;
     }
 
     public int getId() {
@@ -91,6 +91,13 @@ public class Product {
         this.qty = qty;
     }
 
+    public int getDiff() {
+        return diff;
+    }
+    public void setDiff(int diff) {
+        this.diff = diff;
+    }
+
     public double getPrice() {
         return price;
     }
@@ -126,6 +133,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{name='" + name + "', quantity=" + qty + ' ' + diff +"}";
+        return "Product{name='" + name + "', quantity=" + quantity + "  difference  " + diff +"}";
     }
 }
