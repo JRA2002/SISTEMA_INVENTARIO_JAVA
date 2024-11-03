@@ -1300,7 +1300,6 @@ public class DashboardController implements Initializable {
             int actualQty = product.getQuantity();
             int realQty = product.getQty();
             product.setDiff(realQty-actualQty);
-
         });
         new_inventory_table.setItems(inventoryList);
     }
@@ -1311,7 +1310,7 @@ public class DashboardController implements Initializable {
             inventoryCreated = true;
 
         }else{
-            error.getError("YA TIENE UNA SESION ABIERTA");
+            error.getInfo("YA TIENE UNA SESION ABIERTA");
         }
     }
 
@@ -1323,7 +1322,14 @@ public class DashboardController implements Initializable {
     }
 
     public void saveInventory(){
-
+        if(inventoryCreated){
+            Optional<ButtonType> result1 = error.getConfirm("ESTA SEGURO DE PROCESAR ESTE INVENTARIO ?");
+            if (result1.isPresent() && result1.get() == ButtonType.OK) {
+                inventoryDAO.createNewInventory();
+                inventoryCreated = false;
+                new_inventory_table.getItems().clear();
+            }
+        }
     }
 
     //========================PURCHASE METHODS============================

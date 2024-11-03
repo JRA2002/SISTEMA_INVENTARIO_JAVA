@@ -8,4 +8,5 @@ import java.sql.SQLException;
 public interface InventoryDAO {
     void createInventory();
     ObservableList<Product> getProductsList() throws SQLException;
+    void createNewInventory();
 }

@@ -49,4 +49,9 @@ public class InventoryDAOImpl extends Database implements InventoryDAO {
         }
         return productList;
     }
+
+    @Override
+    public void createNewInventory() {
+
+    }
 }
