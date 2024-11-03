@@ -18,7 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-
+import org.inventory_system.config.ErrorMesajes;
 import java.sql.Date;
 import java.util.*;
 
@@ -346,6 +346,8 @@ public class DashboardController implements Initializable {
     InventoryDAO inventoryDAO = new InventoryDAOImpl();
     PurchaseDAO purchaseDAO = new PurchaseDAOImpl();
     ObservableList<Product> productsList = productDAO.getProductsList();
+
+    ErrorMesajes error = new ErrorMesajes();
 
     public DashboardController() throws Exception {
     }
@@ -1277,19 +1279,13 @@ public class DashboardController implements Initializable {
     }
 
     //========================NEW INVENTORY METHODS============================
-    public void newInventory() throws SQLException {
-        System.out.println("new inventory hereeee");
-        /*if (!inventoryCreated) {
-            inventoryDAO.createInventory(userId, datePurchase);
-            inventoryCreated = true;
-        }*/
-        ObservableList<Product> lista = inventoryDAO.getProductsList();
-        for (Product prod : lista) {
+    private void showInventoryTable() throws SQLException {
+        ObservableList<Product> inventoryList = inventoryDAO.getProductsList();
+        for (Product prod : inventoryList) {
             int diff = prod.getQuantity();
             prod.setDiff(-diff);
             System.out.println(prod);
         }
-
         new_inventory_table.setEditable(true);
         inventory_col_prod.setCellValueFactory(new PropertyValueFactory<>("name"));
         inventory_col_price.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -1299,13 +1295,31 @@ public class DashboardController implements Initializable {
         inventory_col_diff.setCellValueFactory(new PropertyValueFactory<>("diff"));
         inventory_col_real_qty.setCellFactory(TextFieldTableCell.<Product, Integer>forTableColumn(new IntegerStringConverter()));
         inventory_col_real_qty.setOnEditCommit(event -> {
-            
+            Product product = event.getRowValue();
+            product.setQty(event.getNewValue());
+            int actualQty = product.getQuantity();
+            int realQty = product.getQty();
+            product.setDiff(realQty-actualQty);
+
         });
-        new_inventory_table.setItems(lista);
+        new_inventory_table.setItems(inventoryList);
+    }
+    public void newInventory() throws SQLException {
+
+        if(!inventoryCreated){
+            showInventoryTable();
+            inventoryCreated = true;
+
+        }else{
+            error.getError("YA TIENE UNA SESION ABIERTA");
+        }
     }
 
     public void cancelInventory(){
-
+            if (inventoryCreated){
+                inventoryCreated = false;
+                new_inventory_table.getItems().clear();
+            }
     }
 
     public void saveInventory(){

@@ -11,4 +11,13 @@ public class ErrorMesajes {
         alert.setContentText(err.getMessage());
         alert.showAndWait();
     }
+
+    public void getError(String err){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeight(500);
+        alert.setTitle("Error Message");
+        alert.setHeaderText(null);
+        alert.setContentText(err);
+        alert.showAndWait();
+    }
 }

@@ -1,5 +1,7 @@
 package org.inventory_system.model;
 
+import javafx.beans.property.SimpleIntegerProperty;
+
 import java.time.LocalDate;
 
 public class Product {
@@ -14,7 +16,7 @@ public class Product {
     private String  suppName;
     private double pricePur;
     private int qty = 0;
-    private int diff;
+    private SimpleIntegerProperty diff;
 
     public Product(int id, String name, String unit, int quantity, double price, String cat_name, LocalDate exp_date, String loc_name) {
         this.id = id;
@@ -47,7 +49,7 @@ public class Product {
         this.unit = unit;
         this.quantity = quantity;
         this.qty = qty;
-        this.diff = diff;
+        this.diff = new SimpleIntegerProperty(diff);
     }
 
     public int getId() {
@@ -92,10 +94,10 @@ public class Product {
     }
 
     public int getDiff() {
-        return diff;
+        return diff.get();
     }
     public void setDiff(int diff) {
-        this.diff = diff;
+        this.diff.set(diff);
     }
 
     public double getPrice() {
@@ -131,6 +133,9 @@ public class Product {
         this.loc_name = loc_name;
     }
 
+    public SimpleIntegerProperty diffProperty() {
+        return diff;
+    }
     @Override
     public String toString() {
         return "Product{name='" + name + "', quantity=" + quantity + "  difference  " + diff +"}";
