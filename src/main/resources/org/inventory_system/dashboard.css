@@ -79,4 +79,8 @@
 -fx-border-width:2px;
 }
 
+.table-cell.inventory-col-total {
+    -fx-text-fill: blue; /* Cambia a cualquier color que prefieras */
+}
+
 

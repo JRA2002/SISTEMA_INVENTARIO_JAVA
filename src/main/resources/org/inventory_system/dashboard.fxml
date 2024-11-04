@@ -369,12 +369,13 @@
                      <children>
                         <TableView fx:id="new_inventory_table" layoutX="13.0" layoutY="68.0" prefHeight="400.0" prefWidth="794.0" stylesheets="@dashboard.css">
                            <columns>
-                              <TableColumn fx:id="inventory_col_prod" prefWidth="142.3" text="PRODUCTO" />
-                              <TableColumn fx:id="inventory_col_price" prefWidth="112.3" text="PRECIO" />
-                              <TableColumn fx:id="inventory_col_unit" prefWidth="132.3" text="UNIDAD" />
-                              <TableColumn fx:id="inventory_col_qty" minWidth="0.0" prefWidth="132.3" text="CANTIDAD" />
-                              <TableColumn fx:id="inventory_col_real_qty" minWidth="0.0" prefWidth="132.3" text="CANTIDAD REAL" />
-                              <TableColumn fx:id="inventory_col_diff" minWidth="0.0" prefWidth="142.3" text="DIFERENCIA" />
+                              <TableColumn fx:id="inventory_col_prod" prefWidth="143.4" text="PRODUCTO" />
+                              <TableColumn fx:id="inventory_col_price" prefWidth="108.4" text="PRECIO" />
+                              <TableColumn fx:id="inventory_col_unit" prefWidth="108.4" text="UNIDAD" />
+                              <TableColumn fx:id="inventory_col_qty" minWidth="0.0" prefWidth="108.4" text="CANTIDAD" />
+                              <TableColumn fx:id="inventory_col_real_qty" minWidth="0.0" prefWidth="108.4" text="CANTIDAD REAL" />
+                              <TableColumn fx:id="inventory_col_diff" minWidth="0.0" prefWidth="108.4" text="DIFERENCIA" />
+                              <TableColumn fx:id="inventory_col_total" minWidth="0.0" prefWidth="108.4" text="TOTAL" />
                            </columns>
                         </TableView>
                         <Button fx:id="inventory_btn_cancel" layoutX="316.0" layoutY="570.0" mnemonicParsing="false" onMouseClicked="#cancelInventory" prefHeight="50.0" prefWidth="150.0" styleClass="add" stylesheets="@dashboard.css" text="CANCEL">

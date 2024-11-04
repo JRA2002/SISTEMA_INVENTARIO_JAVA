@@ -1,5 +1,6 @@
 package org.inventory_system;
 
+import javafx.util.Callback;
 import org.inventory_system.DAO.*;
 import org.inventory_system.interfaces.*;
 import org.inventory_system.model.*;
@@ -153,6 +154,12 @@ public class DashboardController implements Initializable {
 
     @FXML
     private TableColumn<?, ?> inventory_col_diff;
+
+    @FXML
+    private TableColumn<Object, Double> inventory_col_total;
+
+    @FXML
+    private Label inventory_total_diff;
 
     @FXML
     private TextField billing_table_search;
@@ -346,6 +353,7 @@ public class DashboardController implements Initializable {
     InventoryDAO inventoryDAO = new InventoryDAOImpl();
     PurchaseDAO purchaseDAO = new PurchaseDAOImpl();
     ObservableList<Product> productsList = productDAO.getProductsList();
+    ObservableList<Product> inventoryList = inventoryDAO.getProductsList();
 
     ErrorMesajes error = new ErrorMesajes();
 
@@ -1280,31 +1288,67 @@ public class DashboardController implements Initializable {
 
     //========================NEW INVENTORY METHODS============================
     private void showInventoryTable() throws SQLException {
-        ObservableList<Product> inventoryList = inventoryDAO.getProductsList();
+
         for (Product prod : inventoryList) {
             int diff = prod.getQuantity();
+            double total = (prod.getPricePur()*-diff);
             prod.setDiff(-diff);
-            System.out.println(prod);
+            prod.setTotal(total);
         }
         new_inventory_table.setEditable(true);
         inventory_col_prod.setCellValueFactory(new PropertyValueFactory<>("name"));
-        inventory_col_price.setCellValueFactory(new PropertyValueFactory<>("price"));
+        inventory_col_price.setCellValueFactory(new PropertyValueFactory<>("pricePur"));
         inventory_col_unit.setCellValueFactory(new PropertyValueFactory<>("unit"));
         inventory_col_qty.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         inventory_col_real_qty.setCellValueFactory(new PropertyValueFactory<>("qty"));
         inventory_col_diff.setCellValueFactory(new PropertyValueFactory<>("diff"));
+        inventory_col_total.setCellValueFactory(new PropertyValueFactory<>("total"));
+        inventory_col_total.setCellFactory(new Callback<TableColumn<Object,Double>, TableCell<Object,Double>>(){
+            @Override
+            public TableCell<Object, Double> call(TableColumn<Object, Double> tablecolumn) {
+                return new TableCell<Object,Double>(){
+                    @Override
+                    protected void updateItem(Double item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (empty || item == null) {
+                            setText(null);
+                            setStyle(""); // Restablece el estilo cuando la celda está vacía
+                        } else {
+                            setText(item.toString());
+
+                            // Cambia el color del texto según el valor de `item`
+                            if (item >= 0) {
+                                setStyle("-fx-text-fill: green;");
+                            } else {
+                                setStyle("-fx-text-fill: red;");
+                            }
+                        }
+                    }
+                };
+            }
+        });
+
         inventory_col_real_qty.setCellFactory(TextFieldTableCell.<Product, Integer>forTableColumn(new IntegerStringConverter()));
         inventory_col_real_qty.setOnEditCommit(event -> {
             Product product = event.getRowValue();
             product.setQty(event.getNewValue());
             int actualQty = product.getQuantity();
             int realQty = product.getQty();
-            product.setDiff(realQty-actualQty);
+            int diff = realQty-actualQty;
+            double purchasePrice = product.getPricePur();
+            product.setDiff(diff);
+            product.setTotal(purchasePrice*diff);
+            double sumTotal = 0;
+            for (Product prod : inventoryList) {
+                sumTotal = sumTotal + prod.getTotal();
+            }
+            inventory_total_diff.setText(String.valueOf(sumTotal));
+
         });
         new_inventory_table.setItems(inventoryList);
     }
     public void newInventory() throws SQLException {
-
         if(!inventoryCreated){
             showInventoryTable();
             inventoryCreated = true;
@@ -1314,20 +1358,32 @@ public class DashboardController implements Initializable {
         }
     }
 
+    private void setZeroCleanTable(){
+        for (Product prod : inventoryList) {
+            prod.setQty(0);
+            System.out.println(prod);
+        }
+        new_inventory_table.setItems(FXCollections.observableArrayList());
+    }
+
     public void cancelInventory(){
             if (inventoryCreated){
                 inventoryCreated = false;
-                new_inventory_table.getItems().clear();
+                setZeroCleanTable();
             }
     }
 
-    public void saveInventory(){
+    public void saveInventory() throws SQLException {
         if(inventoryCreated){
             Optional<ButtonType> result1 = error.getConfirm("ESTA SEGURO DE PROCESAR ESTE INVENTARIO ?");
             if (result1.isPresent() && result1.get() == ButtonType.OK) {
-                inventoryDAO.createNewInventory();
+                for (Product prod : inventoryList) {
+                    int prodID = prod.getId();
+                    int realQty = prod.getQty();
+                    inventoryDAO.createNewInventory(prodID, realQty);
+                }
                 inventoryCreated = false;
-                new_inventory_table.getItems().clear();
+                setZeroCleanTable();
             }
         }
     }

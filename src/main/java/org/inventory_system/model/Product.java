@@ -1,5 +1,6 @@
 package org.inventory_system.model;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ public class Product {
     private double pricePur;
     private int qty = 0;
     private SimpleIntegerProperty diff;
+    private SimpleDoubleProperty total;
 
     public Product(int id, String name, String unit, int quantity, double price, String cat_name, LocalDate exp_date, String loc_name) {
         this.id = id;
@@ -42,14 +44,15 @@ public class Product {
         this.unit = unit;
         this.qty = qty;
     }
-    public Product(int id, String name, double price, String unit, int quantity, int qty, int diff){
+    public Product(int id, String name, double pricePur, String unit, int quantity, int qty, int diff, double total){
         this.id = id;
         this.name = name;
-        this.price = price;
+        this.pricePur = pricePur;
         this.unit = unit;
         this.quantity = quantity;
         this.qty = qty;
         this.diff = new SimpleIntegerProperty(diff);
+        this.total = new SimpleDoubleProperty(total);
     }
 
     public int getId() {
@@ -99,6 +102,12 @@ public class Product {
     public void setDiff(int diff) {
         this.diff.set(diff);
     }
+    public double getTotal() {
+        return total.get();
+    }
+    public void setTotal(double total) {
+        this.total.set(total);
+    }
 
     public double getPrice() {
         return price;
@@ -135,6 +144,10 @@ public class Product {
 
     public SimpleIntegerProperty diffProperty() {
         return diff;
+    }
+
+    public SimpleDoubleProperty totalProperty() {
+        return total;
     }
     @Override
     public String toString() {
