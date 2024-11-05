@@ -11,7 +11,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import org.inventory_system.excel.CrearExcel;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
@@ -160,6 +159,9 @@ public class DashboardController implements Initializable {
 
     @FXML
     private Label inventory_total_diff;
+
+    @FXML
+    private TextField search_prod_inventory;
 
     @FXML
     private TextField billing_table_search;
@@ -508,6 +510,7 @@ public class DashboardController implements Initializable {
             usr_btn_edit.setVisible(false);
         }
     }
+
 //==================PRODUCTS METHODS================================
 
     public void filterProducts(String searchText) {
@@ -732,6 +735,7 @@ public class DashboardController implements Initializable {
         int newQty = calculateNewStock(productId, quantity);
         productDAO.updateProductStock(productId, newQty);
     }
+
     public ComboBox<String> comboBoxUnit() {
         ComboBox<String> comboUnit = new ComboBox<>();
         for (String unit : unitList) {
@@ -840,6 +844,8 @@ public class DashboardController implements Initializable {
             return false;
         }
     }
+
+    //========================SALES METHODS============================
 
     public void createNewSale() throws SQLException {
         if (bill_item.getText().isBlank() || sales_quantity.getText().isEmpty()) {
@@ -1286,9 +1292,42 @@ public class DashboardController implements Initializable {
         invoice_table.setItems(purchaseList);
     }
 
-    //========================NEW INVENTORY METHODS============================
-    private void showInventoryTable() throws SQLException {
+    public void printInvoiceDetails(){
+        connection = Database.getInstance().connectDB();
+        String sql = "SELECT pu.purchase_id,pu.date,u.username ,SUM(p.purch_price*dp.quantity) AS total " +
+                "FROM purchases pu\n" +
+                "INNER JOIN details_purchases AS dp ON pu.purchase_id=dp.purchase_id\n" +
+                "INNER JOIN products AS p ON dp.product_id=p.id\n" +
+                "INNER JOIN users AS u ON pu.user_id=u.id\n" +
+                "GROUP BY pu.purchase_id";
+        try {
+            JasperDesign jasperDesign = JRXmlLoader.load(this.getClass().getClassLoader().getResourceAsStream("jasper-reports/purchaseList.jrxml"));
+            JRDesignQuery updateQuery = new JRDesignQuery();
+            updateQuery.setText(sql);
+            jasperDesign.setQuery(updateQuery);
+            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, connection);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
+    }
 
+    //========================NEW INVENTORY METHODS============================
+    private void updateInventoryTotalDiff(double value) {
+        inventory_total_diff.setText(String.valueOf(value));
+
+        if (value < 0) {
+            inventory_total_diff.setStyle("-fx-text-fill: red;");
+        } else if (value > 0) {
+            inventory_total_diff.setStyle("-fx-text-fill: green;");
+        } else {
+            inventory_total_diff.setStyle("-fx-text-fill: black;");
+        }
+    }
+
+    private void showInventoryTable() throws SQLException {
+        search_prod_purchase.setEditable(false);
         for (Product prod : inventoryList) {
             int diff = prod.getQuantity();
             double total = (prod.getPricePur()*-diff);
@@ -1313,11 +1352,9 @@ public class DashboardController implements Initializable {
 
                         if (empty || item == null) {
                             setText(null);
-                            setStyle(""); // Restablece el estilo cuando la celda está vacía
+                            setStyle("");
                         } else {
                             setText(item.toString());
-
-                            // Cambia el color del texto según el valor de `item`
                             if (item >= 0) {
                                 setStyle("-fx-text-fill: green;");
                             } else {
@@ -1328,7 +1365,6 @@ public class DashboardController implements Initializable {
                 };
             }
         });
-
         inventory_col_real_qty.setCellFactory(TextFieldTableCell.<Product, Integer>forTableColumn(new IntegerStringConverter()));
         inventory_col_real_qty.setOnEditCommit(event -> {
             Product product = event.getRowValue();
@@ -1343,15 +1379,17 @@ public class DashboardController implements Initializable {
             for (Product prod : inventoryList) {
                 sumTotal = sumTotal + prod.getTotal();
             }
-            inventory_total_diff.setText(String.valueOf(sumTotal));
+            updateInventoryTotalDiff(sumTotal);
 
         });
         new_inventory_table.setItems(inventoryList);
     }
+
     public void newInventory() throws SQLException {
         if(!inventoryCreated){
             showInventoryTable();
             inventoryCreated = true;
+            search_prod_inventory.setEditable(true);
 
         }else{
             error.getInfo("YA TIENE UNA SESION ABIERTA");
@@ -1370,6 +1408,8 @@ public class DashboardController implements Initializable {
             if (inventoryCreated){
                 inventoryCreated = false;
                 setZeroCleanTable();
+                inventory_total_diff.setText("S/. ");
+                search_prod_inventory.setEditable(false);
             }
     }
 
@@ -1547,7 +1587,7 @@ public class DashboardController implements Initializable {
         dash_total_purchase.setText(result);
     }
 
-
+    //========================DASHBOARD METHODS============================
     private void getTotalSales() {
         String totalSales = String.valueOf(salesDAO.getTotalSales());
         dash_total_sold.setText(totalSales);

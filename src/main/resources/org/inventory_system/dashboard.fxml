@@ -407,7 +407,7 @@
                               <Font name="Dubai Bold" size="18.0" />
                            </font>
                         </Label>
-                        <Label fx:id="inventory_total_diff" layoutX="180.0" layoutY="14.0" prefHeight="47.0" prefWidth="150.0" text="S/. ">
+                        <Label fx:id="inventory_total_diff" layoutX="180.0" layoutY="14.0" prefHeight="47.0" prefWidth="160.0" text="S/. ">
                            <font>
                               <Font name="Dubai Bold" size="18.0" />
                            </font>
@@ -425,7 +425,7 @@
                               <TableColumn fx:id="invoice_col_total" prefWidth="198.5" text="MONTO TOTAL" />
                            </columns>
                         </TableView>
-                        <Button fx:id="invoice_btn_print" layoutX="694.0" layoutY="16.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="add" stylesheets="@dashboard.css">
+                        <Button fx:id="invoice_btn_print" layoutX="694.0" layoutY="16.0" mnemonicParsing="false" onAction="#printInvoiceDetails" prefHeight="40.0" prefWidth="100.0" styleClass="add" stylesheets="@dashboard.css">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="PRINT" size="24.0" />
                            </graphic>

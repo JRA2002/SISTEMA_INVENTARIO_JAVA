@@ -2,7 +2,9 @@ package org.inventory_system.DAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.inventory_system.interfaces.ProductDAO;
 import org.inventory_system.interfaces.SalesDAO;
+import org.inventory_system.DAO.ProductDAOImpl;
 import org.inventory_system.model.SalesDetails;
 import org.inventory_system.config.ErrorMesajes;
 import java.sql.PreparedStatement;
@@ -11,6 +13,7 @@ import java.sql.SQLException;
 
 public class SalesDAOImpl extends Database implements SalesDAO {
     ErrorMesajes error = new ErrorMesajes();
+    ProductDAO product = new ProductDAOImpl();
 
     @Override
     public void insertNewSale(String dateSale, int userId) throws SQLException {
@@ -32,6 +35,7 @@ public class SalesDAOImpl extends Database implements SalesDAO {
 
     @Override
     public void insertNewDetailsSales(int salesId, int productId, int quantity) throws SQLException {
+
         try{
             this.connectDB();
 
