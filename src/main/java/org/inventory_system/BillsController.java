@@ -28,10 +28,6 @@ import java.util.ResourceBundle;
 public class BillsController implements Initializable {
 
     @FXML
-    private Button bills_btn_print_bill;
-    @FXML
-    private TextField bills_search_invoice_number;
-    @FXML
     private Button bills_btn_close;
     @FXML
     private AnchorPane bills_print_anchor_pane;
@@ -100,9 +96,11 @@ public class BillsController implements Initializable {
 
     public void searchAndPrintBillDetails(){
         connection= Database.getInstance().connectDB();
-        String sql="SELECT * FROM `sales` s INNER JOIN customers c ON s.cust_id=c.id and s.inv_num='" +bills_search_invoice_number.getText() + "'";
+        String sql="SELECT s.sales_id ,s.date,SUM(ds.quantity*p.price) AS total " +
+                "FROM sales AS s JOIN details_sales AS ds JOIN products AS p\n" +
+                "WHERE s.sales_id=ds.sales_id and ds.product_id=p.id GROUP BY s.sales_id";
         try{
-            JasperDesign jasperDesign= JRXmlLoader.load(this.getClass().getClassLoader().getResourceAsStream("jasper-reports/Invoice.jrxml"));
+            JasperDesign jasperDesign= JRXmlLoader.load(this.getClass().getClassLoader().getResourceAsStream("jasper-reports/salesList.jrxml"));
             JRDesignQuery updateQuery=new JRDesignQuery();
             updateQuery.setText(sql);
             jasperDesign.setQuery(updateQuery);

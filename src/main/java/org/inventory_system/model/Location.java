@@ -2,8 +2,8 @@ package org.inventory_system.model;
 
 public class Location {
 
-    private int loc_id;
-    private String loc_name;
+    private final int loc_id;
+    private final String loc_name;
 
     public Location(int loc_id, String loc_name){
         this.loc_id = loc_id;
